@@ -1,0 +1,50 @@
+:root {
+  /* Colors - Elegant Neutrals */
+  --primary-dark: #2c2c2c;
+  --soft-black: #3a3a3a;
+  --warm-gray: #6b6b6b;
+  --light-gray: #a8a8a8;
+  --pale-gray: #e8e8e8;
+  --off-white: #fafafa;
+  --pure-white: #ffffff;
+  
+  /* Accent Colors */
+  --sage: #8b9d8b;
+  --sage-light: #a5b5a5;
+  --sage-pale: #e8ede8;
+  --blush: #e4d4d1;
+  --sand: #f5f1ed;
+  
+  /* Status Colors */
+  --success: #8b9d8b;
+  --warning: #d4a574;
+  --error: #d4736a;
+  
+  /* Typography */
+  --font-primary: 'Montserrat', sans-serif;
+  --font-secondary: 'Playfair Display', serif;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
