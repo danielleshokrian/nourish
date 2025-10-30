@@ -1,0 +1,188 @@
+.dashboard {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.dashboard-header h1 {
+  font-family: var(--font-secondary);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-regular);
+  color: var(--primary-dark);
+  margin-bottom: var(--space-sm);
+}
+
+/* Date Selector */
+.date-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+
+.date-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--pale-gray);
+  background: var(--pure-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.date-nav-btn:hover {
+  border-color: var(--sage);
+  background: var(--sand);
+}
+
+.date-display {
+  text-align: center;
+  min-width: 200px;
+}
+
+.date-label {
+  font-size: var(--text-lg);
+  font-weight: var(--font-light);
+  color: var(--primary-dark);
+  margin-bottom: var(--space-xs);
+}
+
+.btn-today {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sage);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.btn-today:hover {
+  color: var(--sage-light);
+}
+
+/* Nutrition Grid */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
+}
+
+.nutrition-card {
+  background: var(--pure-white);
+  border: 1px solid var(--pale-gray);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.nutrition-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--sage);
+  transform: scaleX(0);
+  transition: transform var(--transition-base);
+}
+
+.nutrition-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.nutrition-card:hover::before {
+  transform: scaleX(1);
+}
+
+.nutrition-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: var(--space-sm);
+}
+
+.nutrition-value {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-light);
+  color: var(--primary-dark);
+  margin-bottom: var(--space-xs);
+}
+
+.nutrition-unit {
+  font-size: var(--text-lg);
+  color: var(--warm-gray);
+  margin-left: var(--space-xs);
+}
+
+.nutrition-goal {
+  font-size: var(--text-sm);
+  color: var(--light-gray);
+  margin-bottom: var(--space-md);
+}
+
+.nutrition-progress {
+  height: 2px;
+  background: var(--pale-gray);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.nutrition-progress-bar {
+  height: 100%;
+  background: var(--sage);
+  transition: width 0.6s ease;
+}
+
+.nutrition-percentage {
+  font-size: var(--text-xs);
+  color: var(--warm-gray);
+  font-weight: var(--font-medium);
+}
+
+/* Nutrition Status Colors */
+.nutrition-card.low .nutrition-progress-bar {
+  background: var(--warning);
+}
+
+.nutrition-card.good .nutrition-progress-bar {
+  background: var(--success);
+}
+
+.nutrition-card.high .nutrition-progress-bar {
+  background: var(--error);
+}
+
+/* Meals Section */
+.meals-section {
+  margin-top: var(--space-3xl);
+}
+
+
