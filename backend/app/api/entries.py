@@ -19,7 +19,14 @@ def create_entry():
         return jsonify({'errors': err.messages}), 400
     
     if data.get('food_id'):
-        food = Food.query.get(data['food_id'])
+        food_id = data['food_id']
+        
+        if isinstance(food_id, str) and food_id.startswith('spoon_'):
+            return jsonify({
+                'message': 'Please add this food as a custom food first'
+            }), 400
+        
+        food = Food.query.get(food_id)
         if not food:
             return jsonify({'message': 'Food not found'}), 404
         

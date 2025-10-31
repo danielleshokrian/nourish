@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../services/api';
 import foodService from '../../services/foods';
 import entryService from '../../services/entries';
 import useApi from '../../hooks/useApi';
@@ -39,23 +40,39 @@ const AddFoodModal = ({ isOpen, onClose, mealType, date, onFoodAdded }) => {
   };
 
   const handleAddFood = async () => {
-    if (!selectedFood || quantity <= 0) return;
+  if (!selectedFood || quantity <= 0) return;
 
-    const entryData = {
-      food_id: selectedFood.type === 'custom' ? null : selectedFood.id,
-      custom_food_id: selectedFood.type === 'custom' ? selectedFood.id : null,
-      meal_type: mealType,
-      quantity: quantity,
-      date: date
-    };
+  let foodId = selectedFood.id;
+  let customFoodId = null;
 
-    const result = await addEntry(entryData);
-    
-    if (result.success) {
-      onFoodAdded();
-      handleClose();
+  if (selectedFood.type === 'spoonacular') {
+    try {
+      const saveResponse = await api.post(`/foods/spoonacular/${selectedFood.id}`);
+      foodId = saveResponse.food.id;
+    } catch (error) {
+      console.error('Failed to save Spoonacular food:', error);
+      return;
     }
+  } else if (selectedFood.type === 'custom') {
+    customFoodId = selectedFood.id;
+    foodId = null;
+  }
+
+  const entryData = {
+    food_id: foodId,
+    custom_food_id: customFoodId,
+    meal_type: mealType,
+    quantity: quantity,
+    date: date
   };
+
+  const result = await addEntry(entryData);
+  
+  if (result.success) {
+    onFoodAdded();
+    handleClose();
+  }
+};
 
   const handleClose = () => {
     setSearchQuery('');
