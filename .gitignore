@@ -39,4 +39,4 @@ htmlcov/
 .pytest_cache/
 
 # Production
-*.production
+*.production.env
