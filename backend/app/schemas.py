@@ -387,6 +387,13 @@ class FoodEntrySchema(ma.Schema):
             error="Quantity must be between 0.1 and 5000g"
         )
     )
+
+    date = fields.Str(
+        required=True,
+        error_messages={
+            'required': 'Date is required'
+        }
+    )
     
     @post_load
     def convert_date(self, data, **kwargs):
@@ -434,12 +441,6 @@ class FoodEntrySchema(ma.Schema):
             raise ValidationError("Cannot add entries more than 7 days in the future")
         
         return value
-        
-    @post_load
-    def convert_date(self, data, **kwargs):
-        if 'date' in data and isinstance(data['date'], str):
-            data['date'] = datetime.strptime(data['date'], '%Y-%m-%d').date()
-        return data
 
 
 class FoodEntryUpdateSchema(ma.Schema):    
