@@ -388,13 +388,14 @@ class FoodEntrySchema(ma.Schema):
         )
     )
     
-    date = fields.Date(
-        required=True,
-        format='%Y-%m-%d',
-        error_messages={
-            'invalid': 'Date must be in YYYY-MM-DD format'
-        }
-    )
+    @post_load
+    def convert_date(self, data, **kwargs):
+        if 'date' in data and isinstance(data['date'], str):
+            try:
+                data['date'] = datetime.strptime(data['date'], '%Y-%m-%d').date()
+            except ValueError:
+                raise ValidationError('Date must be in YYYY-MM-DD format', field_name='date')
+        return data
     
     notes = fields.Str(
         missing=None,
@@ -414,25 +415,30 @@ class FoodEntrySchema(ma.Schema):
     
     @validates('date')
     def validate_date_range(self, value):
+        if isinstance(value, str):
+            try:
+                parsed_date = datetime.strptime(value, '%Y-%m-%d').date()
+            except ValueError:
+                raise ValidationError("Date must be in YYYY-MM-DD format")
+        else:
+            parsed_date = value
+        
         today = date.today()
         
         min_date = today - timedelta(days=30)
-        if value < min_date:
+        if parsed_date < min_date:
             raise ValidationError("Cannot add entries more than 30 days in the past")
         
         max_date = today + timedelta(days=7)
-        if value > max_date:
+        if parsed_date > max_date:
             raise ValidationError("Cannot add entries more than 7 days in the future")
         
         return value
-    
-    @pre_load
-    def parse_date_string(self, data, **kwargs):
+        
+    @post_load
+    def convert_date(self, data, **kwargs):
         if 'date' in data and isinstance(data['date'], str):
-            try:
-                data['date'] = datetime.strptime(data['date'], '%Y-%m-%d').date()
-            except ValueError:
-                raise ValidationError('Date must be in YYYY-MM-DD format', field_name='date')
+            data['date'] = datetime.strptime(data['date'], '%Y-%m-%d').date()
         return data
 
 
