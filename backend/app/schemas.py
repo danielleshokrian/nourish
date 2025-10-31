@@ -368,9 +368,9 @@ class FoodSearchSchema(ma.Schema):
 
 class FoodEntrySchema(ma.Schema):
     
-    food_id = fields.Int(required=False)
-    custom_food_id = fields.Int(required=False)
-    
+    food_id = fields.Int(required=False, allow_none=True)
+    custom_food_id = fields.Int(required=False, allow_none=True)
+
     meal_type = fields.Str(
         required=True,
         validate=validate.OneOf(
@@ -432,7 +432,7 @@ class FoodEntrySchema(ma.Schema):
             try:
                 data['date'] = datetime.strptime(data['date'], '%Y-%m-%d').date()
             except ValueError:
-                pass
+                raise ValidationError('Date must be in YYYY-MM-DD format', field_name='date')
         return data
 
 

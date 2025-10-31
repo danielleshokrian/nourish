@@ -19,7 +19,7 @@ def search_foods():
     foods = Food.query.filter(Food.name.contains(query)).limit(10).all()
     results = [food.to_dict() for food in foods]
     
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     custom_foods = CustomFood.query.filter_by(user_id=user_id).filter(
         CustomFood.name.contains(query)
     ).limit(5).all()
@@ -38,10 +38,15 @@ def search_foods():
             )
             if response.status_code == 200:
                 spoonacular_results = response.json().get('results', [])
-                
-        except:
+                for item in spoonacular_results:
+                    results.append({
+                        'id': item.get('id'),
+                        'name': item.get('name'),
+                        'type': 'spoonacular'
+                    })
+        except Exception as e:
             pass
-    
+
     return jsonify({'results': results}), 200
 
 @api_bp.route('/foods/custom', methods=['POST'])

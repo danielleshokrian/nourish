@@ -7,16 +7,6 @@ import './MealCard.css';
 const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const getMealIcon = () => {
-    const icons = {
-      breakfast: '🌅',
-      lunch: '☀️',
-      dinner: '🌙',
-      snacks: '🍿'
-    };
-    return icons[mealType] || '🍽️';
-  };
-
   const getMealTitle = () => {
     return mealType.charAt(0).toUpperCase() + mealType.slice(1);
   };
@@ -43,7 +33,6 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
     <div className="meal-card">
       <div className="meal-header">
         <h3 className="meal-title">
-          <span className="meal-icon">{getMealIcon()}</span>
           {getMealTitle()}
         </h3>
         <button 
