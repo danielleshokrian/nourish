@@ -19,19 +19,19 @@ def create_app(config_name='default'):
     ma.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
-    
+
     CORS(app, resources={
         r"/api/*": {
             "origins": [app.config['FRONTEND_URL']],
             "allow_headers": ["Content-Type", "Authorization"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-        }
-    })
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "supports_credentials": True  
+    }
+})
     
     from app.auth import auth_bp
     from app.api import api_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(api_bp, url_prefix='/api')
-    
     return app

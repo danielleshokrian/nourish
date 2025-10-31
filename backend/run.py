@@ -14,7 +14,6 @@ def init_db():
 
 @app.cli.command()
 def seed_db():
-    """Seed the database with sample data."""
     from app.models import Food
     
     foods = [
@@ -34,4 +33,4 @@ def seed_db():
     print("Database seeded!")
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

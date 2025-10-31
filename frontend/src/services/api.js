@@ -1,6 +1,6 @@
 class ApiService {
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    this.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
   }
 
   async request(endpoint, options = {}) {
