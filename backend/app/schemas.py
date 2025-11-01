@@ -164,7 +164,6 @@ class UserRegistrationSchema(ma.Schema):
 
 
 class UserLoginSchema(ma.Schema):
-    
     email = fields.Email(
         required=True,
         error_messages={"required": "Email is required"}
@@ -295,27 +294,6 @@ class CustomFoodSchema(ma.Schema):
         return value.strip()
     
     @validates_schema
-    def validate_macros_to_calories(self, data, **kwargs):
-        protein = data.get('protein', 0)
-        carbs = data.get('carbs', 0)
-        fat = data.get('fat', 0)
-        fiber = data.get('fiber', 0)
-        calories = data.get('calories', 0)
-        
-        # Calculate expected calories (fiber counted as carbs but less caloric)
-        calculated = (protein * 4) + (carbs * 4) + (fat * 9) - (fiber * 2)
-        
-        # Allow 20% variance for rounding
-        min_cal = calculated * 0.8
-        max_cal = calculated * 1.2
-        
-        if not (min_cal <= calories <= max_cal):
-            raise ValidationError(
-                f"Nutrition values don't match. Calories: {calories}, "
-                f"Expected from macros: {calculated:.0f}"
-            )
-    
-    @validates_schema
     def validate_sugar_vs_carbs(self, data, **kwargs):
         sugar = data.get('sugar', 0)
         carbs = data.get('carbs', 0)
@@ -337,7 +315,6 @@ class CustomFoodSchema(ma.Schema):
 
 
 class FoodSearchSchema(ma.Schema):
-    
     query = fields.Str(
         required=True,
         validate=[
@@ -367,7 +344,6 @@ class FoodSearchSchema(ma.Schema):
 
 
 class FoodEntrySchema(ma.Schema):
-    
     food_id = fields.Int(required=False, allow_none=True)
     custom_food_id = fields.Int(required=False, allow_none=True)
 
@@ -522,7 +498,6 @@ class SavedMealSchema(ma.Schema):
 
 
 class RecipeImportSchema(ma.Schema):
-    
     url = fields.Url(
         required=True,
         error_messages={
@@ -563,7 +538,6 @@ class RecipeImportSchema(ma.Schema):
 
 
 class RecipeCreateSchema(ma.Schema):
-    
     name = fields.Str(
         required=True,
         validate=validate.Length(
@@ -635,7 +609,6 @@ class RecipeCreateSchema(ma.Schema):
 
 
 class DateRangeSchema(ma.Schema):
-    
     start_date = fields.Date(
         required=True,
         format='%Y-%m-%d'
@@ -660,7 +633,6 @@ class DateRangeSchema(ma.Schema):
 
 
 class PaginationSchema(ma.Schema):
-    
     page = fields.Int(
         missing=1,
         validate=validate.Range(min=1)
@@ -682,7 +654,6 @@ class PaginationSchema(ma.Schema):
     )
 
 class CustomValidators:
-    
     @staticmethod
     def validate_barcode(barcode):
         if not barcode:
@@ -728,7 +699,6 @@ class CustomValidators:
 
 
 class ErrorResponseSchema(ma.Schema):
-    
     message = fields.Str(required=True)
     errors = fields.Dict(missing={})
     code = fields.Int(missing=400)

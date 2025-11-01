@@ -85,6 +85,8 @@ class CustomFood(db.Model):
     carbs = db.Column(db.Float, nullable=False)
     fat = db.Column(db.Float, nullable=False)
     fiber = db.Column(db.Float, default=0)
+    sugar = db.Column(db.Float)
+    sodium = db.Column(db.Float)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
