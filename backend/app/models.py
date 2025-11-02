@@ -129,6 +129,8 @@ class FoodEntry(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'food_id': self.food_id,
+            'custom_food_id': self.custom_food_id,
             'name': self.food.name if self.food else self.custom_food.name,
             'date': self.date.isoformat(),
             'meal_type': self.meal_type,

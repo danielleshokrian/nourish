@@ -14,7 +14,7 @@
 }
 
 .modal-content {
-  background: var(--pure-white);
+  background: var(--pure-white) !important;
   border-radius: 0;
   max-height: 90vh;
   overflow-y: auto;
@@ -54,6 +54,7 @@
   align-items: center;
   padding: var(--space-xl) var(--space-xl) var(--space-lg);
   border-bottom: 1px solid var(--pale-gray);
+  background: #ffffff; 
 }
 
 .modal-title {
@@ -83,4 +84,5 @@
 
 .modal-body {
   padding: var(--space-xl);
+  background: #ffffff !important;
 }

@@ -89,7 +89,7 @@ const SavedMeals = () => {
               <div className="meal-foods">
                 <h4>Foods in this meal:</h4>
                 <ul>
-                  {meal.foods && JSON.parse(meal.foods).map((food, idx) => (
+                  {meal.foods && meal.foods.map((food, idx) => (
                     <li key={idx}>
                       {food.name} - {food.quantity}g
                     </li>

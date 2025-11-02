@@ -8,14 +8,22 @@
 }
 
 :root {
-  /* Color Palette - Elegant Neutrals */
-  --primary-dark: #2c2c2c;
-  --soft-black: #3a3a3a;
-  --warm-gray: #6b6b6b;
-  --light-gray: #a8a8a8;
-  --pale-gray: #e8e8e8;
-  --off-white: #fafafa;
-  --pure-white: #ffffff;
+  /* Elegant neutrals */
+  --primary: var(--sage);
+  --primary-dark: #6b7d6b;  /* Darker sage */
+  --primary-light: var(--sage-pale);
+  --text-primary: var(--primary-dark);
+  --text-secondary: var(--warm-gray);
+  --bg-primary: var(--pure-white);
+  --bg-secondary: var(--off-white);
+  --card-bg: var(--pure-white);
+  --border-color: var(--pale-gray);
+  
+  /* Nutrition-specific colors */
+  --protein-color: var(--sage);
+  --carbs-color: var(--taupe);
+  --fat-color: var(--blush);
+  --fiber-color: var(--sage-light);
   
   /* Accent Colors - Muted Earth Tones */
   --sage: #8b9d8b;
@@ -200,3 +208,63 @@ a:hover {
 .block { display: block; }
 .flex { display: flex; }
 .grid { display: grid; }
+
+/* Button Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--border-color);
+  border-color: var(--text-secondary);
+}
+
+.btn-danger {
+  background: var(--error, #dc3545);
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
