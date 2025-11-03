@@ -28,89 +28,75 @@ def search_foods():
         food_dict = food.to_dict()
         food_dict['type'] = 'custom'
         results.append(food_dict)
-    
-    spoonacular_key = os.getenv('SPOONACULAR_API_KEY')
-    if spoonacular_key and len(results) < 10: 
+
+    usda_key = os.getenv('USDA_API_KEY')
+    if usda_key and len(results) < 10:
         try:
-            search_response = requests.get(
-                'https://api.spoonacular.com/food/ingredients/search',
-                params={
-                    'query': query, 
-                    'apiKey': spoonacular_key, 
-                    'number': 5,
-                    'metaInformation': True
+            search_response = requests.post(
+                'https://api.nal.usda.gov/fdc/v1/foods/search',
+                params={'api_key': usda_key},
+                json={
+                    'query': query,
+                    'pageSize': 5,
+                    'dataType': ['Branded', 'SR Legacy', 'Foundation']
                 },
-                timeout=3
+                timeout=5
             )
             
             if search_response.status_code == 200:
-                spoonacular_results = search_response.json().get('results', [])
+                usda_results = search_response.json().get('foods', [])
                 
-                for item in spoonacular_results:
-                    try:
-                        nutrition_response = requests.get(
-                            f'https://api.spoonacular.com/food/ingredients/{item["id"]}/information',
-                            params={
-                                'apiKey': spoonacular_key,
-                                'amount': 100,
-                                'unit': 'grams'
-                            },
-                            timeout=3
-                        )
-                        
-                        if nutrition_response.status_code == 200:
-                            nutrition_data = nutrition_response.json()
-                            nutrients = nutrition_data.get('nutrition', {}).get('nutrients', [])
-                            
-                            def get_nutrient(name):
-                                for n in nutrients:
-                                    if n['name'] == name:
-                                        return n['amount']
-                                return 0
-                            
-                            results.append({
-                                'id': f"spoon_{item['id']}",  
-                                'name': item['name'].title(),
-                                'calories': get_nutrient('Calories'),
-                                'protein': get_nutrient('Protein'),
-                                'carbs': get_nutrient('Carbohydrates'),
-                                'fat': get_nutrient('Fat'),
-                                'fiber': get_nutrient('Fiber'),
-                                'type': 'spoonacular'
-                            })
-                    except Exception as e:
-                        continue
-                        
+                for item in usda_results:
+                    food_nutrients = item.get('foodNutrients', [])
+                    
+                    def get_nutrient(nutrient_name):
+                        for nutrient in food_nutrients:
+                            name = nutrient.get('nutrientName', '')
+                            if nutrient_name.lower() in name.lower():
+                                return nutrient.get('value', 0)
+                        return 0
+                    
+                    label_nutrients = item.get('labelNutrients', {})
+                    
+                    results.append({
+                        'id': f"usda_{item['fdcId']}",
+                        'name': item.get('description', '').title(),
+                        'calories': label_nutrients.get('calories', {}).get('value') or get_nutrient('Energy'),
+                        'protein': label_nutrients.get('protein', {}).get('value') or get_nutrient('Protein'),
+                        'carbs': label_nutrients.get('carbohydrates', {}).get('value') or get_nutrient('Carbohydrate'),
+                        'fat': label_nutrients.get('fat', {}).get('value') or get_nutrient('Total lipid'),
+                        'fiber': label_nutrients.get('fiber', {}).get('value') or get_nutrient('Fiber'),
+                        'type': 'usda'
+                    })
+                    
         except Exception as e:
-            print(f"Spoonacular API error: {e}")
+            print(f"USDA API error: {e}")
             pass
 
     return jsonify({'results': results}), 200
 
-@api_bp.route('/foods/spoonacular/<string:spoon_id>', methods=['POST'])
+@api_bp.route('/foods/usda/<string:usda_id>', methods=['POST'])
 @jwt_required()
-def save_spoonacular_food(spoon_id):
-    """Save a Spoonacular food to the local database"""
+def save_usda_food(usda_id):
+    """Save a USDA food to the local database"""
     
-    if spoon_id.startswith('spoon_'):
-        spoon_id = spoon_id.replace('spoon_', '')
+    if usda_id.startswith('usda_'):
+        fdc_id = usda_id.replace('usda_', '')
+    else:
+        fdc_id = usda_id
     
-    existing = Food.query.filter_by(name=f"spoon_{spoon_id}").first()
+    existing = Food.query.filter_by(name=f"usda_{fdc_id}").first()
     if existing:
         return jsonify({'food': existing.to_dict()}), 200
     
-    spoonacular_key = os.getenv('SPOONACULAR_API_KEY')
-    if not spoonacular_key:
-        return jsonify({'message': 'Spoonacular API not configured'}), 500
+    usda_key = os.getenv('USDA_API_KEY')
+    if not usda_key:
+        return jsonify({'message': 'USDA API not configured'}), 500
     
     try:
         response = requests.get(
-            f'https://api.spoonacular.com/food/ingredients/{spoon_id}/information',
-            params={
-                'apiKey': spoonacular_key,
-                'amount': 100,
-                'unit': 'grams'
-            },
+            f'https://api.nal.usda.gov/fdc/v1/food/{fdc_id}',
+            params={'api_key': usda_key},
             timeout=5
         )
         
@@ -118,21 +104,24 @@ def save_spoonacular_food(spoon_id):
             return jsonify({'message': 'Failed to fetch food data'}), 500
         
         data = response.json()
-        nutrients = data.get('nutrition', {}).get('nutrients', [])
+        food_nutrients = data.get('foodNutrients', [])
         
-        def get_nutrient(name):
-            for n in nutrients:
-                if n['name'] == name:
-                    return n['amount']
+        def get_nutrient(nutrient_name):
+            for nutrient in food_nutrients:
+                name = nutrient.get('nutrient', {}).get('name', '')
+                if nutrient_name.lower() in name.lower():
+                    return nutrient.get('amount', 0)
             return 0
         
+        label_nutrients = data.get('labelNutrients', {})
+        
         food = Food(
-            name=data['name'].title(),
-            calories=get_nutrient('Calories'),
-            protein=get_nutrient('Protein'),
-            carbs=get_nutrient('Carbohydrates'),
-            fat=get_nutrient('Fat'),
-            fiber=get_nutrient('Fiber')
+            name=data.get('description', 'Unknown').title(),
+            calories=label_nutrients.get('calories', {}).get('value') or get_nutrient('Energy'),
+            protein=label_nutrients.get('protein', {}).get('value') or get_nutrient('Protein'),
+            carbs=label_nutrients.get('carbohydrates', {}).get('value') or get_nutrient('Carbohydrate'),
+            fat=label_nutrients.get('fat', {}).get('value') or get_nutrient('Total lipid'),
+            fiber=label_nutrients.get('fiber', {}).get('value') or get_nutrient('Fiber')
         )
         
         db.session.add(food)

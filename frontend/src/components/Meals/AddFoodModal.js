@@ -99,12 +99,12 @@ const handleAddSavedMeal = async () => {
   let foodId = selectedFood.id;
   let customFoodId = null;
 
-  if (selectedFood.type === 'spoonacular') {
+  if (selectedFood.type === 'usda') {
     try {
-      const saveResponse = await api.post(`/foods/spoonacular/${selectedFood.id}`);
+      const saveResponse = await api.post(`/foods/usda/${selectedFood.id}`);
       foodId = saveResponse.food.id;
     } catch (error) {
-      console.error('Failed to save Spoonacular food:', error);
+      console.error('Failed to save USDA food:', error);
       return;
     }
   } else if (selectedFood.type === 'custom') {

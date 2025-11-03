@@ -14,8 +14,8 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     
     FRONTEND_URL = os.environ.get('FRONTEND_URL') or 'http://localhost:3000'
-    
-    SPOONACULAR_API_KEY = os.environ.get('SPOONACULAR_API_KEY')
+
+    USDA_API_KEY = os.environ.get('USDA_API_KEY')
     OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 
 class DevelopmentConfig(Config):
