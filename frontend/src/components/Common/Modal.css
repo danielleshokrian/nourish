@@ -13,20 +13,22 @@
   z-index: 9999 !important;
   animation: fadeIn var(--transition-base);
   backdrop-filter: blur(4px);
-  padding: var(--space-lg);
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .modal-content {
   background: var(--pure-white) !important;
   border-radius: var(--radius-lg);
-  max-height: 85vh;
   width: 100%;
+  max-height: none;
   display: flex;
   flex-direction: column;
   animation: slideUp var(--transition-base);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   position: relative;
-  overflow: hidden;
+  margin: auto;
 }
 
 .modal-small {
@@ -102,27 +104,5 @@
 .modal-body {
   padding: var(--space-xl);
   background: #ffffff !important;
-  overflow-y: auto !important;  
-  overflow-x: hidden;
-  flex: 1 1 auto;  
-  min-height: 0;  
-  -webkit-overflow-scrolling: touch; 
-}
-
-.modal-body::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-body::-webkit-scrollbar-track {
-  background: var(--pale-gray);
-  border-radius: 4px;
-}
-
-.modal-body::-webkit-scrollbar-thumb {
-  background: var(--sage);
-  border-radius: 4px;
-}
-
-.modal-body::-webkit-scrollbar-thumb:hover {
-  background: var(--sage-light);
+  flex: 1 1 auto;
 }

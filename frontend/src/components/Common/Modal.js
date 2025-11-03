@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import './Modal.css';
 
 const Modal = ({ isOpen, onClose, title, children, size = 'medium' }) => {
-  // Close on Escape key
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') {
@@ -24,7 +24,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'medium' }) => {
 
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div 
         className={`modal-content modal-${size}`}
@@ -44,7 +44,8 @@ const Modal = ({ isOpen, onClose, title, children, size = 'medium' }) => {
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
