@@ -1,12 +1,16 @@
 .meal-card {
   background: var(--pure-white);
-  border: 1px solid var(--pale-gray);
-  margin-bottom: var(--space-lg);
+  border: 1px solid var(--taupe);
+  margin-bottom: var(--space-xl);
   transition: all var(--transition-base);
+  box-shadow: 0 4px 12px rgba(139, 157, 139, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: visible;
 }
 
 .meal-card:hover {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 8px 24px rgba(139, 157, 139, 0.15);
+  transform: translateY(-2px);
 }
 
 .meal-header {
@@ -14,7 +18,8 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-lg);
-  border-bottom: 1px solid var(--pale-gray);
+  border-bottom: 1px solid var(--sage-pale);
+  background: linear-gradient(to right, var(--sand), var(--pure-white));
 }
 
 .meal-title {
@@ -57,8 +62,8 @@
   display: flex;
   justify-content: space-around;
   padding: var(--space-md) var(--space-lg);
-  background: var(--sand);
-  border-bottom: 1px solid var(--pale-gray);
+  background: linear-gradient(135deg, var(--sage-pale) 0%, var(--sand) 100%);
+  border-bottom: 1px solid var(--taupe);
 }
 
 .macro-item {
@@ -107,10 +112,11 @@
 }
 
 .food-item:hover {
-  background: var(--sand);
+  background: linear-gradient(to right, var(--sand), var(--blush));
   margin: 0 calc(-1 * var(--space-lg));
   padding-left: var(--space-lg);
   padding-right: var(--space-lg);
+  border-radius: var(--radius-sm);
 }
 
 .food-info {

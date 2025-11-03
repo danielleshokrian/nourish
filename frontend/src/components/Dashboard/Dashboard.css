@@ -1,5 +1,7 @@
 .dashboard {
   animation: fadeIn 0.5s ease;
+  min-height: 100vh;
+  padding: var(--space-2xl) 0;
 }
 
 @keyframes fadeIn {
@@ -90,12 +92,13 @@
 
 .nutrition-card {
   background: var(--pure-white);
-  border: 1px solid var(--pale-gray);
+  border: 1px solid var(--taupe);
   padding: var(--space-xl) var(--space-lg);
   text-align: center;
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(212, 196, 176, 0.15);
 }
 
 .nutrition-card::before {
@@ -111,8 +114,9 @@
 }
 
 .nutrition-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(139, 157, 139, 0.15);
+  background: var(--pure-white);
 }
 
 .nutrition-card:hover::before {
@@ -180,9 +184,31 @@
   background: var(--error);
 }
 
+/* Nutrition card color variations */
+.nutrition-card:nth-child(1) {
+  border-top: 3px solid var(--sage);
+}
+
+.nutrition-card:nth-child(2) {
+  border-top: 3px solid var(--taupe);
+}
+
+.nutrition-card:nth-child(3) {
+  border-top: 3px solid var(--blush);
+}
+
+.nutrition-card:nth-child(4) {
+  border-top: 3px solid var(--sage-light);
+}
+
 /* Meals Section */
 .meals-section {
   margin-top: var(--space-3xl);
+  background: var(--pure-white);
+  padding: var(--space-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 20px rgba(139, 157, 139, 0.1);
+  border: 1px solid var(--taupe);
 }
 
 

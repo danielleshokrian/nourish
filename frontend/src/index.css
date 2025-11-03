@@ -10,14 +10,14 @@
 :root {
   /* Elegant neutrals */
   --primary: var(--sage);
-  --primary-dark: #6b7d6b;  /* Darker sage */
+  --primary-dark: #2c2c2c;
   --primary-light: var(--sage-pale);
-  --text-primary: var(--primary-dark);
-  --text-secondary: var(--warm-gray);
-  --bg-primary: var(--pure-white);
-  --bg-secondary: var(--off-white);
+  --text-primary: #2c2c2c;
+  --text-secondary: #6b6b6b;
+  --bg-primary: #c0b6ab;  
+  --bg-secondary: var(--sand);
   --card-bg: var(--pure-white);
-  --border-color: var(--pale-gray);
+  --border-color: var(--taupe);
   
   /* Nutrition-specific colors */
   --protein-color: var(--sage);
@@ -30,7 +30,7 @@
   --sage-light: #a5b5a5;
   --sage-pale: #e8ede8;
   --blush: #e4d4d1;
-  --sand: #f5f1ed;
+  --sand: #d7c3ae;
   --taupe: #d4c4b0;
   
   /* Status Colors */
@@ -106,8 +106,8 @@ body {
   font-family: var(--font-primary);
   font-weight: var(--font-light);
   line-height: 1.6;
-  color: var(--primary-dark);
-  background-color: var(--off-white);
+  color: #3a3a3a;
+  background-color: #f5f5f5;
   min-height: 100vh;
 }
 
@@ -116,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-secondary);
   font-weight: var(--font-regular);
   line-height: 1.2;
-  color: var(--primary-dark);
+  color: #2c2c2c;
   letter-spacing: 0.02em;
 }
 
