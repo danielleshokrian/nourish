@@ -14,17 +14,17 @@ class UserRegistrationSchema(ma.Schema):
         }
     )
     
-    username = fields.Str(
+    name = fields.Str(
         required=True,
         validate=[
             validate.Length(
                 min=3, 
                 max=30, 
-                error="Username must be between 3 and 30 characters"
+                error="Name must be between 3 and 30 characters"
             ),
             validate.Regexp(
                 r'^[a-zA-Z0-9_]+$', 
-                error="Username can only contain letters, numbers, and underscores"
+                error="Name can only contain letters, numbers, and underscores"
             )
         ]
     )
@@ -95,11 +95,11 @@ class UserRegistrationSchema(ma.Schema):
             raise ValidationError("Please use a valid email address")
         return value
     
-    @validates('username')
-    def validate_username_reserved(self, value):
+    @validates('name')
+    def validate_name_reserved(self, value):
         reserved = ['admin', 'root', 'api', 'test', 'user']
         if value.lower() in reserved:
-            raise ValidationError("This username is reserved")
+            raise ValidationError("This name is reserved")
         return value
     
     @validates('password')

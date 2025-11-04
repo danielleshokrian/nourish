@@ -7,7 +7,7 @@ class User(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    username = db.Column(db.String(30), unique=True, nullable=False, index=True)
+    name = db.Column(db.String(30), nullable=False, index=True)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -31,7 +31,7 @@ class User(db.Model):
         return {
             'id': self.id,
             'email': self.email,
-            'username': self.username,
+            'name': self.name,
             'daily_calories': self.daily_calories,
             'daily_protein': self.daily_protein,
             'daily_carbs': self.daily_carbs,

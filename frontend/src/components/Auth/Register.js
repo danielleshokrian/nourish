@@ -8,7 +8,7 @@ const Register = () => {
   const { register } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
-    username: '',
+    name: '',
     password: '',
     confirm_password: '',
     daily_calories: 2200,
@@ -46,8 +46,8 @@ const Register = () => {
       newErrors.email = 'Please enter a valid email';
     }
 
-    if (formData.username.length < 3) {
-      newErrors.username = 'Username must be at least 3 characters';
+    if (formData.name.length < 3) {
+      newErrors.name = 'Name must be at least 3 characters';
     }
 
     if (formData.password.length < 8) {
@@ -78,9 +78,20 @@ const Register = () => {
     if (result.success) {
       navigate('/');
     } else {
-      setErrors({ general: result.error });
+      const newErrors = { ...result.errors };
+      if (result.error && !Object.keys(result.errors || {}).length) {
+        newErrors.general = result.error;
+      }
+
+      Object.keys(newErrors).forEach(key => {
+        if (Array.isArray(newErrors[key])) {
+          newErrors[key] = newErrors[key].join('. ');
+        }
+      });
+
+      setErrors(newErrors);
     }
-    
+
     setLoading(false);
   };
 
@@ -115,19 +126,19 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
-              placeholder="Choose a username"
+              placeholder="Enter your name"
               required
-              className={errors.username ? 'error' : ''}
+              className={errors.name ? 'error' : ''}
             />
-            {errors.username && (
-              <span className="field-error">{errors.username}</span>
+            {errors.name && (
+              <span className="field-error">{errors.name}</span>
             )}
           </div>
 

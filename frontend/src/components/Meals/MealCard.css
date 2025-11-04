@@ -96,6 +96,9 @@
 
 .macro-item {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .macro-label {
@@ -110,6 +113,7 @@
   font-size: var(--text-lg);
   font-weight: var(--font-light);
   color: var(--primary-dark);
+  margin-top: var(--space-xs);
 }
 
 .food-list {

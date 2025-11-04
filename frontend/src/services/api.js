@@ -29,9 +29,13 @@ class ApiService {
           throw new Error('Authentication failed');
         }
         
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || `HTTP error! status: ${response.status}`);
-      }
+        const errorData = await response.json().catch(() => ({}));
+        const error = new Error(errorData.message || `HTTP error! status: ${response.status}`);
+
+          error.errors = errorData.errors || {};
+          error.status = response.status;
+          throw error;
+        }
       
       return await response.json();
     } catch (error) {

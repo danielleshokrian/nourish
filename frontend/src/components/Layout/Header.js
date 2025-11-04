@@ -43,7 +43,7 @@ const Header = () => {
                 onClick={() => setProfileMenuOpen(!profileMenuOpen)}
               >
                 <UserCircleIcon className="icon" />
-                <span className="user-name">{user?.username}</span>
+                <span className="user-name">{user?.name}</span>
               </button>
 
               {profileMenuOpen && (
