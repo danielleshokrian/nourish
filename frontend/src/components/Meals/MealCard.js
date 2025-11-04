@@ -4,6 +4,7 @@ import FoodItem from './FoodItem';
 import AddFoodModal from './AddFoodModal';
 import './MealCard.css';
 import mealService from '../../services/meals';
+import entryService from '../../services/entries';
 import Modal from '../Common/Modal';
 
 
@@ -14,6 +15,7 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [mealName, setMealName] = useState('');
   const [mealDescription, setMealDescription] = useState('');
+  const [isClearing, setIsClearing] = useState(false);
 
   const getMealTitle = () => {
     return mealType.charAt(0).toUpperCase() + mealType.slice(1);
@@ -82,6 +84,25 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
     }
   };
 
+  const handleClearAll = async () => {
+  if (entries.length === 0) return;
+  
+  const confirmMessage = `Clear all ${entries.length} food(s) from ${getMealTitle()}?`;
+  if (!window.confirm(confirmMessage)) return;
+  
+  setIsClearing(true);
+  
+  try {
+    await entryService.clearMealEntries(date, mealType);
+    onEntryAdded();
+  } catch (error) {
+    console.error('Failed to clear meal:', error);
+    alert('Failed to clear meal. Please try again.');
+  } finally {
+    setIsClearing(false);
+  }
+};
+
   return (
     <div className="meal-card">
       <div className="meal-header">
@@ -90,6 +111,7 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
       </div>
       <div className="meal-actions">
         {entries.length > 0 && (
+        <>
           <button 
             className="btn btn-secondary btn-sm"
             onClick={() => setShowSaveModal(true)}
@@ -97,7 +119,16 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
           >
             Save Meal
           </button>
-        )}
+          <button 
+            className="btn btn-danger btn-sm"
+            onClick={handleClearAll}
+            disabled={isClearing}
+            title="Clear all foods from this meal"
+          >
+            {isClearing ? 'Clearing...' : 'Clear All'}
+          </button>
+        </>
+      )}
         <button 
           className="btn btn-primary btn-sm"
           onClick={() => setIsAddModalOpen(true)}

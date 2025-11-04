@@ -17,6 +17,10 @@ class EntryService {
     return api.delete(`/entries/${entryId}`);
   }
 
+  async clearMealEntries(date, mealType) {
+    return api.delete(`/entries/clear?date=${date}&meal_type=${mealType}`);
+  }
+
   async getDailySummary(date) {
     return api.get(`/summary/${date}`);
   }

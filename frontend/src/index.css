@@ -257,6 +257,12 @@ a:hover {
 
 .btn-danger:hover:not(:disabled) {
   background: #c82333;
+  transform: translateY(-1px);
+}
+
+.btn-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-sm {

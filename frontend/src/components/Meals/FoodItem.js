@@ -74,8 +74,8 @@ const FoodItem = ({ entry, onDelete, onUpdate }) => {
   return (
     <div className="food-item">
       <div className="food-info">
-        <span className="food-name">{entry.name}</span>
-        <span className="food-quantity">{entry.quantity}g</span>
+        <div className="food-name-section">
+          <span className="food-name">{entry.name}</span>
         {isEditing ? (
           <div className="quantity-edit">
             <input
@@ -94,6 +94,7 @@ const FoodItem = ({ entry, onDelete, onUpdate }) => {
           <span className="food-quantity">{entry.quantity}g</span>
         )}
       </div>
+   </div>
       
       <div className="food-macros">
         <span className="food-calories">{Math.round(entry.calories)} cal</span>

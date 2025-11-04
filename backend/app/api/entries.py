@@ -170,6 +170,37 @@ def update_entry(entry_id):
         'entry': entry.to_dict()
     }), 200
 
+@api_bp.route('/entries/clear', methods=['DELETE'])
+@jwt_required()
+def clear_meal_entries():
+    user_id = get_jwt_identity()
+    date_str = request.args.get('date')
+    meal_type = request.args.get('meal_type')
+    
+    if not date_str or not meal_type:
+        return jsonify({'message': 'Date and meal_type parameters required'}), 400
+    
+    try:
+        query_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD'}), 400
+    
+    if meal_type not in ['breakfast', 'lunch', 'dinner', 'snacks']:
+        return jsonify({'message': 'Invalid meal type'}), 400
+    
+    deleted_count = FoodEntry.query.filter_by(
+        user_id=user_id,
+        date=query_date,
+        meal_type=meal_type
+    ).delete()
+    
+    db.session.commit()
+    
+    return jsonify({
+        'message': f'{deleted_count} entries deleted',
+        'count': deleted_count
+    }), 200
+
 @api_bp.route('/summary/<string:date_str>', methods=['GET'])
 @jwt_required()
 def get_daily_summary(date_str):
