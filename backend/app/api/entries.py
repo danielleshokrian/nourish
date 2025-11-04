@@ -10,7 +10,7 @@ from app.schemas import FoodEntrySchema
 @api_bp.route('/entries', methods=['POST'])
 @jwt_required()
 def create_entry():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     schema = FoodEntrySchema()
     
     try:
@@ -78,6 +78,7 @@ def create_entry():
 @jwt_required()
 def get_entries():
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     date_str = request.args.get('date')
     
     if not date_str:
@@ -109,6 +110,7 @@ def get_entries():
 @jwt_required()
 def delete_entry(entry_id):
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     entry = FoodEntry.query.filter_by(id=entry_id, user_id=user_id).first()
     
     if not entry:
@@ -123,6 +125,7 @@ def delete_entry(entry_id):
 @jwt_required()
 def update_entry(entry_id):
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     entry = FoodEntry.query.filter_by(id=entry_id, user_id=user_id).first()
     
     if not entry:
@@ -174,6 +177,7 @@ def update_entry(entry_id):
 @jwt_required()
 def clear_meal_entries():
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     date_str = request.args.get('date')
     meal_type = request.args.get('meal_type')
     
@@ -205,6 +209,7 @@ def clear_meal_entries():
 @jwt_required()
 def get_daily_summary(date_str):
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     user = User.query.get(user_id)
     
     try:

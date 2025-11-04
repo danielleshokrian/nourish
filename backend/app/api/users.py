@@ -10,6 +10,7 @@ from app.schemas import GoalsUpdateSchema
 @jwt_required()
 def get_profile():
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     user = User.query.get(user_id)
     
     if not user:
@@ -21,6 +22,7 @@ def get_profile():
 @jwt_required()
 def update_goals():
     user_id = get_jwt_identity()
+    user_id = int(user_id)
     user = User.query.get(user_id)
     
     if not user:

@@ -6,18 +6,20 @@ class ApiService {
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     
-    const config = {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      const headers = {
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
     };
 
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      headers.Authorization = `Bearer ${token}`;
     }
+
+    const config = {
+      ...options,
+      headers,
+    };
 
     try {
       const response = await fetch(url, config);
@@ -32,9 +34,9 @@ class ApiService {
         const errorData = await response.json().catch(() => ({}));
         const error = new Error(errorData.message || `HTTP error! status: ${response.status}`);
 
-          error.errors = errorData.errors || {};
-          error.status = response.status;
-          throw error;
+        error.errors = errorData.errors || {};
+        error.status = response.status;
+        throw error;
         }
       
       return await response.json();

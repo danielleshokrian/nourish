@@ -4,12 +4,13 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
+  const hasToken = !!localStorage.getItem('token');
 
   if (loading) {
     return <div className="loading-screen">Loading...</div>;
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  return (isAuthenticated || hasToken) ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

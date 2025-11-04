@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { format } from 'date-fns';
 import entryService from '../../services/entries';
 import NutritionCard from './NutritionCard';
@@ -23,13 +23,9 @@ const Dashboard = () => {
     execute: fetchEntries 
   } = useApi(entryService.getEntriesByDate);
 
-  useEffect(() => {
-    loadDailyData();
-  }, [selectedDate]);
-
-  const loadDailyData = async () => {
+  const loadDailyData = useCallback(async () => {
     const dateStr = format(selectedDate, 'yyyy-MM-dd');
-    
+
     const [summaryResult, entriesResult] = await Promise.all([
       fetchSummary(dateStr),
       fetchEntries(dateStr)
@@ -40,8 +36,17 @@ const Dashboard = () => {
         summary: summaryResult.data,
         entries: entriesResult.data
       });
+    } else {
+      console.error('Failed to load daily data:', {
+        summaryError: summaryResult.error,
+        entriesError: entriesResult.error
+      });
     }
-  };
+  }, [selectedDate, fetchSummary, fetchEntries]);
+
+    useEffect(() => {
+      loadDailyData();
+    }, [loadDailyData]);
 
   const handleDateChange = (newDate) => {
     setSelectedDate(newDate);
@@ -59,6 +64,8 @@ const Dashboard = () => {
     return <div className="loading">Loading...</div>;
   }
 
+  const hasError = summaryData === null && entriesData === null && !summaryLoading && !entriesLoading;
+
   return (
     <div className="dashboard">
       <div className="dashboard-header">
@@ -68,6 +75,12 @@ const Dashboard = () => {
           onDateChange={handleDateChange}
         />
       </div>
+
+      {hasError && (
+        <div className="error-message">
+          Unable to load data. Please try refreshing the page or logging out and back in.
+        </div>
+      )}
 
       {dailyData && (
         <>
