@@ -119,6 +119,57 @@ def delete_entry(entry_id):
     
     return jsonify({'message': 'Entry deleted'}), 200
 
+@api_bp.route('/entries/<int:entry_id>', methods=['PUT'])
+@jwt_required()
+def update_entry(entry_id):
+    user_id = get_jwt_identity()
+    entry = FoodEntry.query.filter_by(id=entry_id, user_id=user_id).first()
+    
+    if not entry:
+        return jsonify({'message': 'Entry not found'}), 404
+    
+    data = request.json
+    new_quantity = data.get('quantity')
+    
+    if not new_quantity or new_quantity <= 0:
+        return jsonify({'message': 'Invalid quantity'}), 400
+    
+    if entry.food_id:
+        food = Food.query.get(entry.food_id)
+        if not food:
+            return jsonify({'message': 'Food not found'}), 404
+        
+        multiplier = new_quantity / 100
+        entry.quantity = new_quantity
+        entry.calories = food.calories * multiplier
+        entry.protein = food.protein * multiplier
+        entry.carbs = food.carbs * multiplier
+        entry.fat = food.fat * multiplier
+        entry.fiber = food.fiber * multiplier
+        
+    elif entry.custom_food_id:
+        custom_food = CustomFood.query.filter_by(
+            id=entry.custom_food_id,
+            user_id=user_id
+        ).first()
+        if not custom_food:
+            return jsonify({'message': 'Custom food not found'}), 404
+        
+        multiplier = new_quantity / custom_food.serving_size
+        entry.quantity = new_quantity
+        entry.calories = custom_food.calories * multiplier
+        entry.protein = custom_food.protein * multiplier
+        entry.carbs = custom_food.carbs * multiplier
+        entry.fat = custom_food.fat * multiplier
+        entry.fiber = custom_food.fiber * multiplier
+    
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Entry updated',
+        'entry': entry.to_dict()
+    }), 200
+
 @api_bp.route('/summary/<string:date_str>', methods=['GET'])
 @jwt_required()
 def get_daily_summary(date_str):

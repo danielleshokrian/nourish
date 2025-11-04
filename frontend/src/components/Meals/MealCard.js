@@ -139,6 +139,7 @@ const MealCard = ({ mealType, entries, date, onEntryAdded, onEntryDeleted }) => 
               key={entry.id}
               entry={entry}
               onDelete={onEntryDeleted}
+              onUpdate={onEntryAdded}
             />
           ))
         ) : (

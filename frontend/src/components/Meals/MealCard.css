@@ -188,3 +188,46 @@
     display: inline;
   }
 }
+
+/* Quantity Edit Styles */
+.quantity-edit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.quantity-input-field {
+  width: 70px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 2px solid var(--sage);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  text-align: center;
+  background: var(--sand);
+}
+
+.quantity-input-field:focus {
+  outline: none;
+  border-color: var(--sage-light);
+  background: var(--pure-white);
+}
+
+.quantity-unit {
+  font-size: var(--text-sm);
+  color: var(--warm-gray);
+  font-weight: var(--font-medium);
+}
+
+/* Icon Button Variants */
+.btn-icon-success:hover {
+  border-color: var(--success);
+  background: var(--sage-pale);
+  color: var(--success);
+}
+
+.btn-icon-danger:hover {
+  border-color: var(--error);
+  background: var(--blush);
+  color: var(--error);
+}
