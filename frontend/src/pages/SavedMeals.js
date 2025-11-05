@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import mealService from '../services/meals';
 import useApi from '../hooks/useApi';
 import SavedMealFoodItem from '../components/Meals/SavedMealFoodItem';
+import ShareRecipeModal from '../components/Community/ShareRecipeModal';
 import './Pages.css';
 
 const SavedMeals = () => {
@@ -10,6 +11,7 @@ const SavedMeals = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMealType, setSelectedMealType] = useState('breakfast');
   const [editingMealId, setEditingMealId] = useState(null);
+  const [sharingMeal, setSharingMeal] = useState(null);
 
   const { execute: fetchMeals, loading: loadingMeals } = useApi(mealService.getSavedMeals);
   const { execute: deleteMeal } = useApi(mealService.deleteSavedMeal);
@@ -191,6 +193,12 @@ const SavedMeals = () => {
                   >
                     Add to Today
                   </button>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => setSharingMeal(meal)}
+                    >
+                    Share to Community
+                    </button>
                 </div>
                 <button
                   className="btn btn-danger btn-sm"
@@ -201,6 +209,16 @@ const SavedMeals = () => {
               </div>
             </div>
           ))}
+            {sharingMeal && (
+                <ShareRecipeModal
+                    meal={sharingMeal}
+                    onClose={() => setSharingMeal(null)}
+                    onSuccess={() => {
+                    setSharingMeal(null);
+                    alert('Recipe shared successfully!');
+                    }}
+                />
+            )}
         </div>
       )}
     </div>

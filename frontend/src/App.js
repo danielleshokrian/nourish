@@ -11,6 +11,8 @@ import Progress from './pages/Progress';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import PrivateRoute from './components/Auth/PrivateRoute';
+import Community from './pages/Community';
+import RecipeDetail from './pages/RecipeDetail';
 import './index.css';
 
 function App() {
@@ -48,6 +50,26 @@ function App() {
               <PrivateRoute>
                 <Layout>
                   <SavedMeals />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/community"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Community />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/community/:recipeId"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <RecipeDetail />
                 </Layout>
               </PrivateRoute>
             }

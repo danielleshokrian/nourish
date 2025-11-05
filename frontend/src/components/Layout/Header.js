@@ -34,6 +34,7 @@ const Header = () => {
             <Link to="/foods" className="nav-link">My Foods</Link>
             <Link to="/meals" className="nav-link">Saved Meals</Link>
             <Link to="/progress" className="nav-link">Progress</Link>
+            <Link to="/community" className="nav-link">Community</Link>
           </nav>
 
           <div className="header-actions">

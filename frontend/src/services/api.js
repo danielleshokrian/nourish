@@ -74,6 +74,29 @@ class ApiService {
       method: 'DELETE',
     });
   }
+
+  async postFormData(endpoint, formData) {
+    try {
+      const token = localStorage.getItem('token');  
+      const response = await fetch(`${this.baseURL}${endpoint}`, { 
+        method: 'POST',
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Request failed');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
+    }
+  }
 }
 
 const api = new ApiService();
