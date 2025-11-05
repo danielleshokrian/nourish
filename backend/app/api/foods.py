@@ -8,6 +8,9 @@ from app.schemas import CustomFoodSchema
 import requests
 import os
 
+usda_key = os.getenv('USDA_API_KEY')
+API_URL = 'https://api.nal.usda.gov/fdc/v1/food'
+
 @api_bp.route('/foods/search', methods=['GET'])
 @jwt_required()
 def search_foods():
@@ -29,11 +32,10 @@ def search_foods():
         food_dict['type'] = 'custom'
         results.append(food_dict)
 
-    usda_key = os.getenv('USDA_API_KEY')
     if usda_key and len(results) < 10:
         try:
             search_response = requests.post(
-                'https://api.nal.usda.gov/fdc/v1/foods/search',
+                f'{API_URL}s/search',
                 params={'api_key': usda_key},
                 json={
                     'query': query,
@@ -77,9 +79,7 @@ def search_foods():
 
 @api_bp.route('/foods/usda/<string:usda_id>', methods=['POST'])
 @jwt_required()
-def save_usda_food(usda_id):
-    """Save a USDA food to the local database"""
-    
+def save_usda_food(usda_id):    
     if usda_id.startswith('usda_'):
         fdc_id = usda_id.replace('usda_', '')
     else:
@@ -95,7 +95,7 @@ def save_usda_food(usda_id):
     
     try:
         response = requests.get(
-            f'https://api.nal.usda.gov/fdc/v1/food/{fdc_id}',
+            f'{API_URL}/{fdc_id}',
             params={'api_key': usda_key},
             timeout=5
         )
