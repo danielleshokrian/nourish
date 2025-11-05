@@ -42,7 +42,7 @@ class UserRegistrationSchema(ma.Schema):
     
     confirm_password = fields.Str(required=True)
     
-    daily_calories = fields.Float(
+    daily_calories = fields.Integer(
         missing=2000,
         validate=validate.Range(
             min=1200, 
@@ -51,7 +51,7 @@ class UserRegistrationSchema(ma.Schema):
         )
     )
     
-    daily_protein = fields.Float(
+    daily_protein = fields.Integer(
         missing=50,
         validate=validate.Range(
             min=20, 
@@ -60,7 +60,7 @@ class UserRegistrationSchema(ma.Schema):
         )
     )
     
-    daily_carbs = fields.Float(
+    daily_carbs = fields.Integer(
         missing=275,
         validate=validate.Range(
             min=50, 
@@ -69,7 +69,7 @@ class UserRegistrationSchema(ma.Schema):
         )
     )
     
-    daily_fat = fields.Float(
+    daily_fat = fields.Integer(
         missing=78,
         validate=validate.Range(
             min=20, 
@@ -78,7 +78,7 @@ class UserRegistrationSchema(ma.Schema):
         )
     )
     
-    daily_fiber = fields.Float(
+    daily_fiber = fields.Integer(
         missing=28,
         validate=validate.Range(
             min=10, 
@@ -181,19 +181,19 @@ class UserLoginSchema(ma.Schema):
 
 class GoalsUpdateSchema(ma.Schema):
     
-    daily_calories = fields.Float(
+    daily_calories = fields.Integer(
         validate=validate.Range(min=1200, max=5000)
     )
-    daily_protein = fields.Float(
+    daily_protein = fields.Integer(
         validate=validate.Range(min=20, max=300)
     )
-    daily_carbs = fields.Float(
+    daily_carbs = fields.Integer(
         validate=validate.Range(min=50, max=500)
     )
-    daily_fat = fields.Float(
+    daily_fat = fields.Integer(
         validate=validate.Range(min=20, max=200)
     )
-    daily_fiber = fields.Float(
+    daily_fiber = fields.Integer(
         validate=validate.Range(min=10, max=50)
     )
     
@@ -223,7 +223,7 @@ class CustomFoodSchema(ma.Schema):
         validate=validate.Length(max=50)
     )
     
-    serving_size = fields.Float(
+    serving_size = fields.Integer(
         required=True,
         validate=validate.Range(
             min=1, 
@@ -232,7 +232,7 @@ class CustomFoodSchema(ma.Schema):
         )
     )
     
-    calories = fields.Float(
+    calories = fields.Integer(
         required=True,
         validate=validate.Range(
             min=0, 
@@ -241,7 +241,7 @@ class CustomFoodSchema(ma.Schema):
         )
     )
     
-    protein = fields.Float(
+    protein = fields.Integer(
         required=True,
         validate=validate.Range(
             min=0, 
@@ -250,7 +250,7 @@ class CustomFoodSchema(ma.Schema):
         )
     )
     
-    carbs = fields.Float(
+    carbs = fields.Integer(
         required=True,
         validate=validate.Range(
             min=0, 
@@ -259,7 +259,7 @@ class CustomFoodSchema(ma.Schema):
         )
     )
     
-    fat = fields.Float(
+    fat = fields.Integer(
         required=True,
         validate=validate.Range(
             min=0, 
@@ -268,7 +268,7 @@ class CustomFoodSchema(ma.Schema):
         )
     )
     
-    fiber = fields.Float(
+    fiber = fields.Integer(
         missing=0,
         validate=validate.Range(
             min=0, 
@@ -276,13 +276,13 @@ class CustomFoodSchema(ma.Schema):
             error="Fiber must be between 0 and 100g"
         )
     )
-    
-    sugar = fields.Float(
+
+    sugar = fields.Integer(
         missing=None,
         validate=validate.Range(min=0, max=500)
     )
-    
-    sodium = fields.Float(
+
+    sodium = fields.Integer(
         missing=None,
         validate=validate.Range(min=0, max=10000)
     )
@@ -355,7 +355,7 @@ class FoodEntrySchema(ma.Schema):
         )
     )
     
-    quantity = fields.Float(
+    quantity = fields.Integer(
         required=True,
         validate=validate.Range(
             min=0.1, 
@@ -420,7 +420,7 @@ class FoodEntrySchema(ma.Schema):
 
 
 class FoodEntryUpdateSchema(ma.Schema):    
-    quantity = fields.Float(
+    quantity = fields.Integer(
         validate=validate.Range(min=0.1, max=5000)
     )
     

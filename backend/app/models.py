@@ -11,12 +11,12 @@ class User(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    daily_calories = db.Column(db.Float, default=2000)
-    daily_protein = db.Column(db.Float, default=50)
-    daily_carbs = db.Column(db.Float, default=275)
-    daily_fat = db.Column(db.Float, default=78)
-    daily_fiber = db.Column(db.Float, default=28)
-    
+    daily_calories = db.Column(db.Integer, default=2000)
+    daily_protein = db.Column(db.Integer, default=50)
+    daily_carbs = db.Column(db.Integer, default=275)
+    daily_fat = db.Column(db.Integer, default=78)
+    daily_fiber = db.Column(db.Integer, default=28)
+
     food_entries = db.relationship('FoodEntry', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     custom_foods = db.relationship('CustomFood', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     saved_meals = db.relationship('SavedMeal', backref='user', lazy='dynamic', cascade='all, delete-orphan')
@@ -48,13 +48,13 @@ class Food(db.Model):
     barcode = db.Column(db.String(20))
     
     # Nutrition per 100g
-    calories = db.Column(db.Float, nullable=False)
-    protein = db.Column(db.Float, nullable=False)
-    carbs = db.Column(db.Float, nullable=False)
-    fat = db.Column(db.Float, nullable=False)
-    fiber = db.Column(db.Float, default=0)
-    sugar = db.Column(db.Float)
-    sodium = db.Column(db.Float)
+    calories = db.Column(db.Integer, nullable=False)
+    protein = db.Column(db.Integer, nullable=False)
+    carbs = db.Column(db.Integer, nullable=False)
+    fat = db.Column(db.Integer, nullable=False)
+    fiber = db.Column(db.Integer, default=0)
+    sugar = db.Column(db.Integer)
+    sodium = db.Column(db.Integer)
     
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
@@ -78,16 +78,16 @@ class CustomFood(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     brand = db.Column(db.String(50))
-    serving_size = db.Column(db.Float, nullable=False)
+    serving_size = db.Column(db.Integer, nullable=False)
     
-    calories = db.Column(db.Float, nullable=False)
-    protein = db.Column(db.Float, nullable=False)
-    carbs = db.Column(db.Float, nullable=False)
-    fat = db.Column(db.Float, nullable=False)
-    fiber = db.Column(db.Float, default=0)
-    sugar = db.Column(db.Float)
-    sodium = db.Column(db.Float)
-    
+    calories = db.Column(db.Integer, nullable=False)
+    protein = db.Column(db.Integer, nullable=False)
+    carbs = db.Column(db.Integer, nullable=False)
+    fat = db.Column(db.Integer, nullable=False)
+    fiber = db.Column(db.Integer, default=0)
+    sugar = db.Column(db.Integer)
+    sodium = db.Column(db.Integer)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     def to_dict(self):
@@ -113,14 +113,14 @@ class FoodEntry(db.Model):
     
     date = db.Column(db.Date, nullable=False, index=True)
     meal_type = db.Column(db.String(20), nullable=False)
-    quantity = db.Column(db.Float, nullable=False)
-    
-    calories = db.Column(db.Float, nullable=False)
-    protein = db.Column(db.Float, nullable=False)
-    carbs = db.Column(db.Float, nullable=False)
-    fat = db.Column(db.Float, nullable=False)
-    fiber = db.Column(db.Float, nullable=False)
-    
+    quantity = db.Column(db.Integer, nullable=False)
+
+    calories = db.Column(db.Integer, nullable=False)
+    protein = db.Column(db.Integer, nullable=False)
+    carbs = db.Column(db.Integer, nullable=False)
+    fat = db.Column(db.Integer, nullable=False)
+    fiber = db.Column(db.Integer, nullable=False)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     food = db.relationship('Food', backref='entries')
@@ -151,12 +151,12 @@ class SavedMeal(db.Model):
     description = db.Column(db.String(500))
     foods = db.Column(db.Text, nullable=False)  
     
-    total_calories = db.Column(db.Float, nullable=False)
-    total_protein = db.Column(db.Float, nullable=False)
-    total_carbs = db.Column(db.Float, nullable=False)
-    total_fat = db.Column(db.Float, nullable=False)
-    total_fiber = db.Column(db.Float, nullable=False)
-    
+    total_calories = db.Column(db.Integer, nullable=False)
+    total_protein = db.Column(db.Integer, nullable=False)
+    total_carbs = db.Column(db.Integer, nullable=False)
+    total_fat = db.Column(db.Integer, nullable=False)
+    total_fiber = db.Column(db.Integer, nullable=False)
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     def to_dict(self):
