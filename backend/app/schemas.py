@@ -3,7 +3,7 @@ from marshmallow.decorators import post_dump
 from app import ma
 import re
 from datetime import datetime, date, timedelta
-
+from marshmallow.validate import Length
 
 class UserRegistrationSchema(ma.Schema):    
     email = fields.Email(
@@ -705,3 +705,16 @@ class ErrorResponseSchema(ma.Schema):
     
     class Meta:
         ordered = True
+
+class CommunityRecipeSchema(ma.Schema):
+    title = fields.Str(required=True, validate=[Length(min=3, max=100)])
+    description = fields.Str(missing=None, validate=Length(max=500))
+    instructions = fields.Str(required=True, validate=Length(min=10, max=5000))
+    foods = fields.List(
+        fields.Dict(),
+        required=True,
+        validate=validate.Length(min=1, error="At least one food item is required")
+    )
+    
+    class Meta:
+        fields = ('title', 'description', 'instructions', 'foods')

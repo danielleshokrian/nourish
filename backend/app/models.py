@@ -172,3 +172,52 @@ class SavedMeal(db.Model):
             'total_fat': self.total_fat,
             'total_fiber': self.total_fiber
         }
+    
+class CommunityRecipe(db.Model):
+    __tablename__ = 'community_recipes'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(500))
+    instructions = db.Column(db.Text, nullable=False)
+    image_filename = db.Column(db.String(255))  
+    
+    foods = db.Column(db.Text, nullable=False)  
+    total_calories = db.Column(db.Integer, nullable=False)
+    total_protein = db.Column(db.Integer, nullable=False)
+    total_carbs = db.Column(db.Integer, nullable=False)
+    total_fat = db.Column(db.Integer, nullable=False)
+    total_fiber = db.Column(db.Integer, nullable=False)
+    
+    likes_count = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref=db.backref('community_recipes', lazy='dynamic'))
+    
+    def to_dict(self, include_user=True):
+        import json
+        result = {
+            'id': self.id,
+            'user_id': self.user_id,
+            'title': self.title,
+            'description': self.description,
+            'instructions': self.instructions,
+            'image_url': f'/api/community/recipes/{self.id}/image' if self.image_filename else None,
+            'foods': json.loads(self.foods),
+            'total_calories': self.total_calories,
+            'total_protein': self.total_protein,
+            'total_carbs': self.total_carbs,
+            'total_fat': self.total_fat,
+            'total_fiber': self.total_fiber,
+            'likes_count': self.likes_count,
+            'created_at': self.created_at.isoformat()
+        }
+        
+        if include_user:
+            result['creator'] = {
+                'id': self.user.id,
+                'name': self.user.name
+            }
+        
+        return result
