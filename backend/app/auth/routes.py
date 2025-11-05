@@ -18,9 +18,6 @@ def register():
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'message': 'Email already registered'}), 409
 
-    if User.query.filter_by(name=data['name']).first():
-        return jsonify({'message': 'Name already taken'}), 409
-
     user = User(
         email=data['email'],
         name=data['name']
