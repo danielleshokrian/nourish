@@ -152,3 +152,21 @@
 .auth-switch a:hover {
   border-bottom-color: var(--sage);
 }
+
+.btn-demo {
+  margin-top: 10px;
+  background-color: #6c757d;
+  border: 2px solid #6c757d;
+  color: white;
+}
+
+.btn-demo:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.btn-demo:disabled {
+  background-color: #adb5bd;
+  border-color: #adb5bd;
+  cursor: not-allowed;
+}

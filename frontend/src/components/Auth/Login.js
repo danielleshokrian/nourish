@@ -18,7 +18,6 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Clear error for this field
     if (errors[e.target.name]) {
       setErrors({
         ...errors,
@@ -38,6 +37,22 @@ const Login = () => {
       navigate('/');
     } else {
       setErrors({ general: result.error });
+    }
+    
+    setLoading(false);
+  };
+
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    setLoading(true);
+
+    const result = await login('demo@nourish.app', 'Demo123!');
+    
+    if (result.success) {
+      navigate('/');
+    } else {
+      setErrors({ general: 'Demo account not available. Please contact support.' });
     }
     
     setLoading(false);
@@ -96,6 +111,15 @@ const Login = () => {
             disabled={loading}
           >
             {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+          
+          <button 
+            type="button"
+            onClick={handleDemoLogin}
+            className="btn btn-demo"
+            disabled={loading}
+          >
+            Try Demo Account
           </button>
         </form>
 
