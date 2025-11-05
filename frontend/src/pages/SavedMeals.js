@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import mealService from '../services/meals';
 import useApi from '../hooks/useApi';
+import SavedMealFoodItem from '../components/Meals/SavedMealFoodItem';
 import './Pages.css';
 
 const SavedMeals = () => {
   const [meals, setMeals] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMealType, setSelectedMealType] = useState('breakfast');
+  const [editingMealId, setEditingMealId] = useState(null);
 
   const { execute: fetchMeals, loading: loadingMeals } = useApi(mealService.getSavedMeals);
   const { execute: deleteMeal } = useApi(mealService.deleteSavedMeal);
   const { execute: addMealToDay, loading: adding } = useApi(mealService.addSavedMealToDay);
+  const { execute: updateMeal } = useApi(mealService.updateSavedMeal);
 
   useEffect(() => {
     loadMeals();
@@ -41,6 +44,59 @@ const SavedMeals = () => {
       alert('Meal added to your day!');
     }
   };
+    
+  const handleUpdateFood = async (mealId, updatedFood) => {
+    const meal = meals.find(m => m.id === mealId);
+    if (!meal) return;
+
+    const updatedFoods = meal.foods.map(f => 
+      (f.food_id && f.food_id === updatedFood.food_id) ||
+      (f.custom_food_id && f.custom_food_id === updatedFood.custom_food_id) ||
+      (f.name === updatedFood.name)
+        ? updatedFood
+        : f
+    );
+
+    const result = await updateMeal(mealId, {
+      name: meal.name,
+      description: meal.description,
+      foods: updatedFoods
+    });
+
+    if (result.success) {
+      setMeals(meals.map(m => m.id === mealId ? result.data.meal : m));
+    }
+  };
+
+  const handleRemoveFood = async (mealId, foodToRemove) => {
+    const meal = meals.find(m => m.id === mealId);
+    if (!meal) return;
+
+    if (meal.foods.length === 1) {
+      alert('Cannot remove the last food item. Delete the meal instead.');
+      return;
+    }
+
+    const updatedFoods = meal.foods.filter(f => 
+      !((f.food_id && f.food_id === foodToRemove.food_id) ||
+        (f.custom_food_id && f.custom_food_id === foodToRemove.custom_food_id) ||
+        (f.name === foodToRemove.name))
+    );
+
+    const result = await updateMeal(mealId, {
+      name: meal.name,
+      description: meal.description,
+      foods: updatedFoods
+    });
+
+    if (result.success) {
+      setMeals(meals.map(m => m.id === mealId ? result.data.meal : m));
+    }
+  };
+
+  const toggleEditMode = (mealId) => {
+    setEditingMealId(editingMealId === mealId ? null : mealId);
+  };
 
   if (loadingMeals) {
     return <div className="loading">Loading saved meals...</div>;
@@ -65,6 +121,12 @@ const SavedMeals = () => {
                 {meal.description && (
                   <p className="meal-description">{meal.description}</p>
                 )}
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => toggleEditMode(meal.id)}
+                >
+                  {editingMealId === meal.id ? 'Done Editing' : 'Edit Ingredients'}
+                </button>
               </div>
 
               <div className="meal-nutrition-summary">
@@ -88,14 +150,27 @@ const SavedMeals = () => {
 
               <div className="meal-foods">
                 <h4>Foods in this meal:</h4>
-                <ul>
-                  {meal.foods && meal.foods.map((food, idx) => (
-                    <li key={idx}>
-                      {food.name} - {food.quantity}g
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {editingMealId === meal.id ? (
+                    <div className="food-items-list">
+                        {meal.foods && meal.foods.map((food, idx) => (
+                        <SavedMealFoodItem
+                            key={idx}
+                            food={food}
+                            onUpdate={(updatedFood) => handleUpdateFood(meal.id, updatedFood)}
+                            onRemove={(foodToRemove) => handleRemoveFood(meal.id, foodToRemove)}
+                        />
+                        ))}
+                    </div>
+                    ) : (
+                    <ul>
+                        {meal.foods && meal.foods.map((food, idx) => (
+                        <li key={idx}>
+                            {food.name} - {food.quantity}g
+                        </li>
+                        ))}
+                    </ul>
+                    )}
+                </div>
 
               <div className="meal-card-actions">
                 <div className="add-to-day-section">
