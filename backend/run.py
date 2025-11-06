@@ -32,5 +32,29 @@ def seed_db():
     db.session.commit()
     print("Database seeded!")
 
+@app.cli.command()
+def create_demo_user():
+    """Create or update the demo user account"""
+    demo_email = 'demo@nourish.app'
+    demo_password = 'Demo123!'
+    demo_name = 'Demo User'
+
+    demo_user = User.query.filter_by(email=demo_email).first()
+
+    if demo_user:
+        print("Demo user already exists, updating password...")
+        demo_user.set_password(demo_password)
+    else:
+        print("Creating demo user...")
+        demo_user = User(
+            email=demo_email,
+            name=demo_name
+        )
+        demo_user.set_password(demo_password)
+        db.session.add(demo_user)
+
+    db.session.commit()
+    print(f"Demo user ready! Email: {demo_email}, Password: {demo_password}")
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
