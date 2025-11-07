@@ -131,14 +131,30 @@ def get_recipe_image(recipe_id):
     
     if not recipe or not recipe.image_filename:
         return jsonify({'message': 'Image not found'}), 404
-    
-    filepath = os.path.join(UPLOAD_FOLDER, recipe.image_filename)
-    
-    if not os.path.exists(filepath):
-        return jsonify({'message': 'Image file not found'}), 404
-    
-    return send_file(filepath, mimetype='image/jpeg')
 
+    filepath = os.path.join(UPLOAD_FOLDER, recipe.image_filename)
+
+    if not os.path.exists(filepath):
+
+        return jsonify({'message': 'Image file not found'}), 404
+
+    ext = recipe.image_filename.rsplit('.', 1)[1].lower() if '.' in recipe.image_filename else 'jpg'
+    mimetype_map = {
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif',
+        'webp': 'image/webp'
+
+    }
+    mimetype = mimetype_map.get(ext, 'image/jpeg')
+
+    response = send_file(filepath, mimetype=mimetype)
+
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Cross-Origin-Resource-Policy'] = 'cross-origin'
+    return response
+    
 @api_bp.route('/community/recipes/<int:recipe_id>/import', methods=['POST'])
 @jwt_required()
 def import_recipe_to_saved_meals(recipe_id):

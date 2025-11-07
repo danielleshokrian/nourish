@@ -1,6 +1,8 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
+import os
+import json
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -196,14 +198,14 @@ class CommunityRecipe(db.Model):
     user = db.relationship('User', backref=db.backref('community_recipes', lazy='dynamic'))
     
     def to_dict(self, include_user=True):
-        import json
+        backend_url = os.environ.get('BACKEND_URL', 'http://localhost:5001')
         result = {
             'id': self.id,
             'user_id': self.user_id,
             'title': self.title,
             'description': self.description,
             'instructions': self.instructions,
-            'image_url': f'/api/community/recipes/{self.id}/image' if self.image_filename else None,
+            'image_url': f'{backend_url}/api/community/recipes/{self.id}/image' if self.image_filename else None,
             'foods': json.loads(self.foods),
             'total_calories': self.total_calories,
             'total_protein': self.total_protein,
@@ -212,8 +214,8 @@ class CommunityRecipe(db.Model):
             'total_fiber': self.total_fiber,
             'likes_count': self.likes_count,
             'created_at': self.created_at.isoformat()
+
         }
-        
         if include_user:
             result['creator'] = {
                 'id': self.user.id,
