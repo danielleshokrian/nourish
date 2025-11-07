@@ -83,11 +83,24 @@
 }
 
 /* Nutrition Grid */
-.nutrition-grid {
+.dashboard.nutrition-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(5, 1fr) !important;
   gap: var(--space-lg);
   margin-bottom: var(--space-3xl);
+}
+
+/* Responsive: Stack on smaller screens */
+@media (max-width: 1100px) {
+  .dashboard.nutrition-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard.nutrition-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .nutrition-card {

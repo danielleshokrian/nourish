@@ -610,15 +610,11 @@
   }
 }
 
-@media (max-width: 480px) {
-  .recipes-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .nutrition-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-3xl);
 
   .nutrition-item .value {
     font-size: 1.25rem;
