@@ -1,8 +1,10 @@
 import os
 from datetime import timedelta
 from dotenv import load_dotenv
+from pathlib import Path
 
-load_dotenv()
+basedir = Path(__file__).resolve().parent
+load_dotenv(basedir / '.env')
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
