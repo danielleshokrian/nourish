@@ -9,9 +9,16 @@ load_dotenv(basedir / '.env')
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key'
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or 'dev-jwt-secret'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///nutrition_tracker.db'
+
+    db_url = os.environ.get('DATABASE_URL')
+    if not db_url or db_url.startswith('sqlite:///') and not db_url.startswith('sqlite:////'):
+        db_path = basedir / 'nutrition_tracker.db'
+        SQLALCHEMY_DATABASE_URI = f'sqlite:///{db_path}'
+    else:
+        SQLALCHEMY_DATABASE_URI = db_url
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
+
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     
