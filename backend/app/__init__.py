@@ -20,14 +20,11 @@ def create_app(config_name='default'):
     jwt.init_app(app)
     migrate.init_app(app, db)
 
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": [app.config['FRONTEND_URL']],
-            "allow_headers": ["Content-Type", "Authorization"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "supports_credentials": True  
-    }
-})
+    CORS(app,
+         resources={r"/*": {"origins": "*"}},
+         allow_headers=["Content-Type", "Authorization"],
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         supports_credentials=False)
     
     from app.auth import auth_bp
     from app.api import api_bp

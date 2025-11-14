@@ -1,4 +1,4 @@
-#!/Users/danielleshokrian/Flatiron/nourish/backend/venv/bin/python
+#!/Users/danielleshokrian/Flatiron/nourish/backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
