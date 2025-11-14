@@ -1,7 +1,12 @@
 from app import create_app, db
 from app.models import User, Food, FoodEntry, CustomFood, SavedMeal
+import os
 
-app = create_app('development')
+# Use production config if FLASK_ENV is production
+
+config_name = 'production' if os.environ.get('FLASK_ENV') == 'production' else 'development'
+
+app = create_app(config_name)
 
 @app.shell_context_processor
 def make_shell_context():
