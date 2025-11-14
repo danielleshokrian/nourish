@@ -14,4 +14,4 @@ pip install -r requirements.txt
 
 # Run database migrations
 
-flask --app run db upgrade
+flask --app run init-db
