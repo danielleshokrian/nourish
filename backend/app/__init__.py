@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_migrate import Migrate
 from config import config
+
 
 db = SQLAlchemy()
 ma = Marshmallow()
@@ -20,11 +21,15 @@ def create_app(config_name='default'):
     jwt.init_app(app)
     migrate.init_app(app, db)
 
-    CORS(app,
-         resources={r"/*": {"origins": "*"}},
-         allow_headers=["Content-Type", "Authorization"],
-         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-         supports_credentials=False)
+    CORS(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "https://nourish-xi.vercel.app"
+            ]
+        }
+    })
     
     from app.auth import auth_bp
     from app.api import api_bp
