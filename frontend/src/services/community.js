@@ -31,7 +31,12 @@ const communityService = {
   },
 
   getImageUrl(recipeId) {
-    return `${api.baseURL}/community/recipes/${recipeId}/image`;
+    const baseURL = process.env.REACT_APP_API_URL || (
+      process.env.NODE_ENV === 'production' 
+        ? 'https://nourish-muv1.onrender.com'
+        : 'http://localhost:5001'
+    );
+    return `${baseURL}/community/recipes/${recipeId}/image`;
   }
 };
 
