@@ -42,7 +42,7 @@ def create_demo_user():
     """Create or update the demo user account"""
     demo_email = 'demo@nourish.app'
     demo_password = 'Demo123!'
-    demo_name = 'Demo User'
+    demo_name = 'Demo_User'
 
     demo_user = User.query.filter_by(email=demo_email).first()
 

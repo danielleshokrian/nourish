@@ -31,7 +31,7 @@ const communityService = {
   },
 
   getImageUrl(recipeId) {
-    return `${api.defaults.baseURL}/community/recipes/${recipeId}/image`;
+    return `${api.baseURL}/community/recipes/${recipeId}/image`;
   }
 };
 
