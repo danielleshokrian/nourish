@@ -1,4 +1,4 @@
-from flask import Flask, app
+from flask import Flask, app, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
@@ -21,16 +21,26 @@ def create_app(config_name='default'):
     jwt.init_app(app)
     migrate.init_app(app, db)
 
-    CORS(app,
-        origins=[
-            "http://localhost:3000",
-            "http://localhost:5173"
-        ],
-        origin_regex=r"https://.*\.vercel\.app$",  
-        supports_credentials=True,
-        allow_headers=["Content-Type", "Authorization"],
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    CORS(app, 
+        resources={
+            r"/*": {
+                "origins": ["http://localhost:3000", "http://localhost:5173"],
+                "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+                "supports_credentials": True
+            }
+        }
     )
+
+    @app.after_request
+    def after_request(response):
+        origin = request.headers.get('Origin')
+        if origin and 'vercel.app' in origin:
+            response.headers['Access-Control-Allow-Origin'] = origin
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+            response.headers['Access-Control-Allow-Credentials'] = 'true'
+        return response
     
     from app.auth import auth_bp
     from app.api import api_bp
