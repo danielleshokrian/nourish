@@ -205,7 +205,7 @@ class CommunityRecipe(db.Model):
             'title': self.title,
             'description': self.description,
             'instructions': self.instructions,
-            'image_url': f'{backend_url}/api/community/recipes/{self.id}/image' if self.image_filename else None,
+            'image_url': f'{backend_url}/community/recipes/{self.id}/image' if self.image_filename else None,
             'foods': json.loads(self.foods),
             'total_calories': self.total_calories,
             'total_protein': self.total_protein,
