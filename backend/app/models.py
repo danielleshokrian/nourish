@@ -198,7 +198,7 @@ class CommunityRecipe(db.Model):
     user = db.relationship('User', backref=db.backref('community_recipes', lazy='dynamic'))
     
     def to_dict(self, include_user=True):
-        backend_url = os.environ.get('BACKEND_URL', 'http://localhost:5001')
+        backend_url = os.environ.get('BACKEND_URL', 'https://nourish-muv1.onrender.com')
         result = {
             'id': self.id,
             'user_id': self.user_id,
