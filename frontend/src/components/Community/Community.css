@@ -499,12 +499,12 @@
 }
 
 .btn-primary {
-  background-color: #5d7b5e;
+  background-color: #779a78;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #5d7b5e;
+  background-color: #779a78;
 }
 
 .btn-secondary {
@@ -517,22 +517,22 @@
 }
 
 .btn-success {
-  background-color: #5d7b5e;
+  background-color: #779a78;
   color: white;
   border: none;
 }
 
 .btn-success:hover:not(:disabled) {
-  background-color: #5d7b5e;
+  background-color: #779a78;
 }
 
 .btn-danger {
-  background-color: #bc6a64;
+  background-color: #c0837f;
   color: white;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #bc6a64;
+  background-color: #c0837f;
 }
 
 .btn-sm {
