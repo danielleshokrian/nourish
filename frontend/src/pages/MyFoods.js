@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import foodService from '../services/foods';
 import useApi from '../hooks/useApi';
 import Modal from '../components/Common/Modal';
@@ -23,16 +23,16 @@ const MyFoods = () => {
   const { execute: createFood, loading: creating } = useApi(foodService.createCustomFood);
   const { execute: deleteFood } = useApi(foodService.deleteCustomFood);
 
-  useEffect(() => {
-    loadFoods();
-  }, []);
-
-  const loadFoods = async () => {
+  const loadFoods = useCallback(async () => {
     const result = await fetchFoods();
     if (result.success) {
       setFoods(result.data.foods || []);
     }
-  };
+  }, [fetchFoods]);
+
+  useEffect(() => {
+    loadFoods();
+  }, [loadFoods]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

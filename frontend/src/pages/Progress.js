@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { format, subDays, startOfWeek, endOfWeek } from 'date-fns';
+import React, { useState, useEffect, useCallback } from 'react';
+import { format, subDays, endOfWeek } from 'date-fns';
 import entryService from '../services/entries';
 import useApi from '../hooks/useApi';
 import { useAuth } from '../contexts/AuthContext';
@@ -13,13 +13,8 @@ const Progress = () => {
 
   const { execute: fetchSummary } = useApi(entryService.getDailySummary);
 
-  useEffect(() => {
-    loadWeeklyData();
-  }, [selectedWeek]);
-
-  const loadWeeklyData = async () => {
+  const loadWeeklyData = useCallback(async () => {
     setLoading(true);
-    const weekStart = startOfWeek(selectedWeek, { weekStartsOn: 0 }); // Sunday
     const weekEnd = endOfWeek(selectedWeek, { weekStartsOn: 0 });
 
     const promises = [];
@@ -51,7 +46,11 @@ const Progress = () => {
 
     setWeeklyData(weekData);
     setLoading(false);
-  };
+  }, [selectedWeek, fetchSummary]);
+
+  useEffect(() => {
+    loadWeeklyData();
+  }, [loadWeeklyData]);
 
   const goToPreviousWeek = () => {
     setSelectedWeek(prev => subDays(prev, 7));
