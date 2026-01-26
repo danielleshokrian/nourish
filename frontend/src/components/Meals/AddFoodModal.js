@@ -38,12 +38,12 @@ const AddFoodModal = ({ isOpen, onClose, mealType, date, onFoodAdded }) => {
     }
   }, [fetchSavedMeals]);
 
-  const performSearch = useCallback(async () => {
-    const result = await searchFoods(searchQuery);
+  const performSearch = useCallback(async (query) => {
+    const result = await searchFoods(query);
     if (result.success) {
       setSearchResults(result.data.results || []);
     }
-  }, [searchFoods, searchQuery]);
+  }, [searchFoods]);
 
   useEffect(() => {
     if (isOpen) {
@@ -55,7 +55,7 @@ const AddFoodModal = ({ isOpen, onClose, mealType, date, onFoodAdded }) => {
   useEffect(() => {
     if (searchQuery.length >= 2) {
       const delayDebounce = setTimeout(() => {
-        performSearch();
+        performSearch(searchQuery);
       }, 300);
 
       return () => clearTimeout(delayDebounce);
