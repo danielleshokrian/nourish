@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import communityService from '../services/community';
 import RecipeCard from '../components/Community/RecipeCard';
 import useApi from '../hooks/useApi';
@@ -13,22 +13,21 @@ const Community = () => {
 
   const { execute: fetchRecipes, loading } = useApi(communityService.getRecipes);
 
-  useEffect(() => {
-    loadRecipes();
-  }, [currentPage, searchQuery]);
-
-  const loadRecipes = async () => {
+  const loadRecipes = useCallback(async () => {
     const result = await fetchRecipes(currentPage, searchQuery);
     if (result.success) {
       setRecipes(result.data.recipes || []);
       setTotalPages(result.data.pages || 1);
     }
-  };
+  }, [fetchRecipes, currentPage, searchQuery]);
+
+  useEffect(() => {
+    loadRecipes();
+  }, [loadRecipes]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
-    loadRecipes();
   };
 
   return (
