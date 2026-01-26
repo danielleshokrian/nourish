@@ -30,4 +30,5 @@ class EntryService {
   }
 }
 
-export default new EntryService();
+const entryService = new EntryService();
+export default entryService;

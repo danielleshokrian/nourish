@@ -26,4 +26,5 @@ class FoodService {
   }
 }
 
-export default new FoodService();
+const foodService = new FoodService();
+export default foodService;

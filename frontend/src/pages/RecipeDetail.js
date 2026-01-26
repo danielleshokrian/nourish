@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import communityService from '../services/community';
 import useApi from '../hooks/useApi';
@@ -16,16 +16,16 @@ const RecipeDetail = () => {
   const { execute: importRecipe, loading: importing } = useApi(communityService.importRecipe);
   const { execute: deleteRecipe } = useApi(communityService.deleteRecipe);
 
-  useEffect(() => {
-    loadRecipe();
-  }, [recipeId]);
-
-  const loadRecipe = async () => {
+  const loadRecipe = useCallback(async () => {
     const result = await fetchRecipe(recipeId);
     if (result.success) {
       setRecipe(result.data.recipe);
     }
-  };
+  }, [fetchRecipe, recipeId]);
+
+  useEffect(() => {
+    loadRecipe();
+  }, [loadRecipe]);
 
   const handleImport = async () => {
     const result = await importRecipe(recipeId);
