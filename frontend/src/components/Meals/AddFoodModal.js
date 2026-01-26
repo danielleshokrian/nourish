@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import foodService from '../../services/foods';
 import entryService from '../../services/entries';
@@ -24,12 +24,33 @@ const AddFoodModal = ({ isOpen, onClose, mealType, date, onFoodAdded }) => {
   const { execute: fetchCustomFoods, loading: loadingCustom } = useApi(foodService.getCustomFoods);
   const { execute: fetchSavedMeals, loading: loadingSavedMeals } = useApi(mealService.getSavedMeals);
 
+  const loadCustomFoods = useCallback(async () => {
+    const result = await fetchCustomFoods();
+    if (result.success) {
+      setCustomFoods(result.data.foods || []);
+    }
+  }, [fetchCustomFoods]);
+
+  const loadSavedMeals = useCallback(async () => {
+    const result = await fetchSavedMeals();
+    if (result.success) {
+      setSavedMeals(result.data.meals || []);
+    }
+  }, [fetchSavedMeals]);
+
+  const performSearch = useCallback(async () => {
+    const result = await searchFoods(searchQuery);
+    if (result.success) {
+      setSearchResults(result.data.results || []);
+    }
+  }, [searchFoods, searchQuery]);
+
   useEffect(() => {
     if (isOpen) {
-      loadCustomFoods(); 
+      loadCustomFoods();
       loadSavedMeals();
     }
-  }, [isOpen]); 
+  }, [isOpen, loadCustomFoods, loadSavedMeals]);
 
   useEffect(() => {
     if (searchQuery.length >= 2) {
@@ -41,28 +62,7 @@ const AddFoodModal = ({ isOpen, onClose, mealType, date, onFoodAdded }) => {
     } else {
       setSearchResults([]);
     }
-  }, [searchQuery]);
-
-  const performSearch = async () => {
-    const result = await searchFoods(searchQuery);
-    if (result.success) {
-      setSearchResults(result.data.results || []);
-    }
-  };
-
-  const loadCustomFoods = async () => { 
-  const result = await fetchCustomFoods();
-  if (result.success) {
-    setCustomFoods(result.data.foods || []);
-  }
-};
-
-  const loadSavedMeals = async () => { 
-    const result = await fetchSavedMeals();
-    if (result.success) {
-      setSavedMeals(result.data.meals || []);
-    }
-  };
+  }, [searchQuery, performSearch]);
 
 const handleAddSavedMeal = async () => {
   if (!selectedSavedMeal) return;
