@@ -107,12 +107,15 @@ class CustomFood(db.Model):
 
 class FoodEntry(db.Model):
     __tablename__ = 'food_entries'
-    
+    __table_args__ = (
+        db.Index('ix_food_entries_user_date', 'user_id', 'date'),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
     food_id = db.Column(db.Integer, db.ForeignKey('foods.id'))
     custom_food_id = db.Column(db.Integer, db.ForeignKey('custom_foods.id'))
-    
+
     date = db.Column(db.Date, nullable=False, index=True)
     meal_type = db.Column(db.String(20), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)

@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 from datetime import datetime
+from sqlalchemy.orm import joinedload
 from app import db
 from app.api import api_bp
 from app.models import FoodEntry, Food, CustomFood, User
@@ -89,18 +90,21 @@ def get_entries():
     except ValueError:
         return jsonify({'message': 'Invalid date format. Use YYYY-MM-DD'}), 400
     
-    entries = FoodEntry.query.filter_by(
+    entries = FoodEntry.query.options(
+        joinedload(FoodEntry.food),
+        joinedload(FoodEntry.custom_food)
+    ).filter_by(
         user_id=user_id,
         date=query_date
     ).all()
-    
+
     meals = {
         'breakfast': [],
         'lunch': [],
         'dinner': [],
         'snacks': []
     }
-    
+
     for entry in entries:
         meals[entry.meal_type].append(entry.to_dict())
     
@@ -217,11 +221,14 @@ def get_daily_summary(date_str):
     except ValueError:
         return jsonify({'message': 'Invalid date format'}), 400
     
-    entries = FoodEntry.query.filter_by(
+    entries = FoodEntry.query.options(
+        joinedload(FoodEntry.food),
+        joinedload(FoodEntry.custom_food)
+    ).filter_by(
         user_id=user_id,
         date=query_date
     ).all()
-    
+
     totals = {
         'calories': sum(e.calories for e in entries),
         'protein': sum(e.protein for e in entries),
