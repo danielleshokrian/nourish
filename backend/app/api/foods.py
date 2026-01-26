@@ -39,38 +39,36 @@ def search_foods():
                 params={'api_key': usda_key},
                 json={
                     'query': query,
-                    'pageSize': 5,
-                    'dataType': ['Branded', 'SR Legacy', 'Foundation']
+                    'pageSize': 10,
+                    'dataType': ['SR Legacy', 'Foundation']  # Only use standard reference data (per 100g)
                 },
                 timeout=5
             )
-            
+
             if search_response.status_code == 200:
                 usda_results = search_response.json().get('foods', [])
-                
+
                 for item in usda_results:
                     food_nutrients = item.get('foodNutrients', [])
-                    
+
                     def get_nutrient(nutrient_name):
                         for nutrient in food_nutrients:
                             name = nutrient.get('nutrientName', '')
                             if nutrient_name.lower() in name.lower():
                                 return nutrient.get('value', 0)
                         return 0
-                    
-                    label_nutrients = item.get('labelNutrients', {})
-                    
+
                     results.append({
                         'id': f"usda_{item['fdcId']}",
                         'name': item.get('description', '').title(),
-                        'calories': label_nutrients.get('calories', {}).get('value') or get_nutrient('Energy'),
-                        'protein': label_nutrients.get('protein', {}).get('value') or get_nutrient('Protein'),
-                        'carbs': label_nutrients.get('carbohydrates', {}).get('value') or get_nutrient('Carbohydrate'),
-                        'fat': label_nutrients.get('fat', {}).get('value') or get_nutrient('Total lipid'),
-                        'fiber': label_nutrients.get('fiber', {}).get('value') or get_nutrient('Fiber'),
+                        'calories': get_nutrient('Energy'),
+                        'protein': get_nutrient('Protein'),
+                        'carbs': get_nutrient('Carbohydrate'),
+                        'fat': get_nutrient('Total lipid'),
+                        'fiber': get_nutrient('Fiber'),
                         'type': 'usda'
                     })
-                    
+
         except Exception as e:
             print(f"USDA API error: {e}")
             pass
@@ -105,23 +103,22 @@ def save_usda_food(usda_id):
         
         data = response.json()
         food_nutrients = data.get('foodNutrients', [])
-        
+
         def get_nutrient(nutrient_name):
             for nutrient in food_nutrients:
                 name = nutrient.get('nutrient', {}).get('name', '')
                 if nutrient_name.lower() in name.lower():
                     return nutrient.get('amount', 0)
             return 0
-        
-        label_nutrients = data.get('labelNutrients', {})
-        
+
+        # Use nutrient values directly (per 100g for SR Legacy/Foundation)
         food = Food(
             name=data.get('description', 'Unknown').title(),
-            calories=label_nutrients.get('calories', {}).get('value') or get_nutrient('Energy'),
-            protein=label_nutrients.get('protein', {}).get('value') or get_nutrient('Protein'),
-            carbs=label_nutrients.get('carbohydrates', {}).get('value') or get_nutrient('Carbohydrate'),
-            fat=label_nutrients.get('fat', {}).get('value') or get_nutrient('Total lipid'),
-            fiber=label_nutrients.get('fiber', {}).get('value') or get_nutrient('Fiber')
+            calories=get_nutrient('Energy'),
+            protein=get_nutrient('Protein'),
+            carbs=get_nutrient('Carbohydrate'),
+            fat=get_nutrient('Total lipid'),
+            fiber=get_nutrient('Fiber')
         )
         
         db.session.add(food)
