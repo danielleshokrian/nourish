@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { format } from 'date-fns';
 import mealService from '../services/meals';
 import useApi from '../hooks/useApi';
@@ -8,7 +8,7 @@ import './Pages.css';
 
 const SavedMeals = () => {
   const [meals, setMeals] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate] = useState(new Date());
   const [selectedMealType, setSelectedMealType] = useState('breakfast');
   const [editingMealId, setEditingMealId] = useState(null);
   const [sharingMeal, setSharingMeal] = useState(null);
@@ -18,16 +18,16 @@ const SavedMeals = () => {
   const { execute: addMealToDay, loading: adding } = useApi(mealService.addSavedMealToDay);
   const { execute: updateMeal } = useApi(mealService.updateSavedMeal);
 
-  useEffect(() => {
-    loadMeals();
-  }, []);
-
-  const loadMeals = async () => {
+  const loadMeals = useCallback(async () => {
     const result = await fetchMeals();
     if (result.success) {
       setMeals(result.data.meals || []);
     }
-  };
+  }, [fetchMeals]);
+
+  useEffect(() => {
+    loadMeals();
+  }, [loadMeals]);
 
   const handleDelete = async (mealId) => {
     if (window.confirm('Are you sure you want to delete this saved meal?')) {

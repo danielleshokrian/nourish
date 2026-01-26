@@ -22,4 +22,5 @@ class MealService {
 }
 }
 
-export default new MealService();
+const mealService = new MealService();
+export default mealService;
