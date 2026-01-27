@@ -201,19 +201,32 @@ class CommunityRecipe(db.Model):
     user = db.relationship('User', backref=db.backref('community_recipes', lazy='dynamic'))
     
     def to_dict(self, include_user=True):
-        from flask import request, has_request_context
+        from flask import request, has_request_context, url_for, current_app
         # Use request host if available (for dynamic URL construction), otherwise fall back to env var
         if has_request_context() and request:
-            backend_url = f"{request.scheme}://{request.host}"
+            # Use url_for to construct the correct URL, which handles the application context properly
+            if self.image_filename:
+                try:
+                    # Try to use url_for for proper URL construction (most reliable)
+                    with current_app.app_context():
+                        image_url = url_for('api.get_recipe_image', recipe_id=self.id, _external=True)
+                except Exception as e:
+                    # Fallback to manual construction if url_for fails
+                    backend_url = f"{request.scheme}://{request.host}"
+                    image_url = f'{backend_url}/community/recipes/{self.id}/image'
+            else:
+                image_url = None
         else:
+            # No request context - use environment variable or default
             backend_url = os.environ.get('BACKEND_URL', 'http://localhost:5001')
+            image_url = f'{backend_url}/community/recipes/{self.id}/image' if self.image_filename else None
         result = {
             'id': self.id,
             'user_id': self.user_id,
             'title': self.title,
             'description': self.description,
             'instructions': self.instructions,
-            'image_url': f'{backend_url}/community/recipes/{self.id}/image' if self.image_filename else None,
+            'image_url': image_url,
             'foods': json.loads(self.foods),
             'total_calories': self.total_calories,
             'total_protein': self.total_protein,

@@ -125,7 +125,7 @@ def get_community_recipe(recipe_id):
         'recipe': recipe.to_dict()
     }), 200
 
-@api_bp.route('/community/recipes/<int:recipe_id>/image', methods=['GET'])
+@api_bp.route('/community/recipes/<int:recipe_id>/image', methods=['GET'], endpoint='get_recipe_image')
 def get_recipe_image(recipe_id):
     recipe = CommunityRecipe.query.get(recipe_id)
     
