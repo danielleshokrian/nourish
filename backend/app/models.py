@@ -201,7 +201,12 @@ class CommunityRecipe(db.Model):
     user = db.relationship('User', backref=db.backref('community_recipes', lazy='dynamic'))
     
     def to_dict(self, include_user=True):
-        backend_url = os.environ.get('BACKEND_URL', 'https://nourish-muv1.onrender.com')
+        from flask import request, has_request_context
+        # Use request host if available (for dynamic URL construction), otherwise fall back to env var
+        if has_request_context() and request:
+            backend_url = f"{request.scheme}://{request.host}"
+        else:
+            backend_url = os.environ.get('BACKEND_URL', 'http://localhost:5001')
         result = {
             'id': self.id,
             'user_id': self.user_id,
