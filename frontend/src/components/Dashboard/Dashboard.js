@@ -60,9 +60,8 @@ const Dashboard = () => {
     loadDailyData(); 
   };
 
-  if (summaryLoading || entriesLoading) {
-    return <div className="loading">Loading...</div>;
-  }
+  // Show skeleton UI while loading instead of blocking
+  const isLoading = summaryLoading || entriesLoading;
 
   const hasError = summaryData === null && entriesData === null && !summaryLoading && !entriesLoading;
 
@@ -79,6 +78,12 @@ const Dashboard = () => {
       {hasError && (
         <div className="error-message">
           Unable to load data. Please try refreshing the page or logging out and back in.
+        </div>
+      )}
+
+      {isLoading && !dailyData && (
+        <div className="loading" style={{ padding: '2rem', textAlign: 'center' }}>
+          Loading your nutrition data...
         </div>
       )}
 

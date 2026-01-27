@@ -18,12 +18,14 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Don't block rendering - check auth in background
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
     try {
       if (authService.isAuthenticated()) {
+        // Fetch user profile in background without blocking render
         const userData = await userService.getProfile();
         setUser(userData);
       }

@@ -1,19 +1,34 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout/Layout';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-import Dashboard from './components/Dashboard/Dashboard';
-import MyFoods from './pages/MyFoods';
-import SavedMeals from './pages/SavedMeals';
-import Progress from './pages/Progress';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
 import PrivateRoute from './components/Auth/PrivateRoute';
-import Community from './pages/Community';
-import RecipeDetail from './pages/RecipeDetail';
 import './index.css';
+
+// Lazy load components for code splitting
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
+const MyFoods = lazy(() => import('./pages/MyFoods'));
+const SavedMeals = lazy(() => import('./pages/SavedMeals'));
+const Progress = lazy(() => import('./pages/Progress'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Community = lazy(() => import('./pages/Community'));
+const RecipeDetail = lazy(() => import('./pages/RecipeDetail'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="loading-screen" style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    minHeight: '50vh',
+    fontSize: '18px'
+  }}>
+    Loading...
+  </div>
+);
 
 function App() {
   return (
@@ -29,7 +44,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <Dashboard />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Dashboard />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -39,7 +56,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <MyFoods />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <MyFoods />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -49,7 +68,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <SavedMeals />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <SavedMeals />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -59,7 +80,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <Community />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Community />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -69,7 +92,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <RecipeDetail />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <RecipeDetail />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -79,7 +104,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <Progress />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Progress />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -89,7 +116,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <Profile />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Profile />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
@@ -99,7 +128,9 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout>
-                  <Settings />
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Settings />
+                  </Suspense>
                 </Layout>
               </PrivateRoute>
             }
