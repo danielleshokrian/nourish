@@ -2,6 +2,9 @@
   animation: fadeIn 0.5s ease;
   min-height: 100vh;
   padding: var(--space-2xl) 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -83,22 +86,23 @@
 }
 
 /* Nutrition Grid */
-.dashboard.nutrition-grid {
+.dashboard .nutrition-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr) !important;
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--space-lg);
   margin-bottom: var(--space-3xl);
+  width: 100%;
 }
 
 /* Responsive: Stack on smaller screens */
 @media (max-width: 1100px) {
-  .dashboard.nutrition-grid {
+  .dashboard .nutrition-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .dashboard.nutrition-grid {
+  .dashboard .nutrition-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -112,6 +116,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(212, 196, 176, 0.15);
+  min-width: 0; /* Prevent grid items from overflowing */
+  max-width: 100%; /* Ensure cards don't exceed container */
 }
 
 .nutrition-card::before {
