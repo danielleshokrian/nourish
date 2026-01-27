@@ -498,14 +498,7 @@
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background-color: #779a78;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #779a78;
-}
+/* Button styles use global definitions from index.css */
 
 .btn-secondary {
   background-color: #6c757d;
@@ -535,10 +528,7 @@
   background-color: #c0837f;
 }
 
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
-}
+/* Button size styles use global definitions from index.css */
 
 /* Loading and Empty States */
 .loading {

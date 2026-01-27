@@ -209,7 +209,7 @@ a:hover {
 .flex { display: flex; }
 .grid { display: grid; }
 
-/* Button Styles */
+/* Button Styles - Global definitions */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -228,15 +228,20 @@ a:hover {
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background: var(--primary);
+/* Primary button - muted sage green (higher specificity to prevent overrides) */
+.btn.btn-primary,
+button.btn-primary,
+.btn-primary.btn {
+  background: var(--sage);
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: var(--primary-dark);
+.btn.btn-primary:hover:not(:disabled),
+button.btn-primary:hover:not(:disabled),
+.btn-primary.btn:hover:not(:disabled) {
+  background: var(--sage-light);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(139, 157, 139, 0.15);
 }
 
 .btn-secondary {

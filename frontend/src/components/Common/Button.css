@@ -18,12 +18,12 @@
 
 /* Variants */
 .btn-primary {
-  background: var(--primary-dark);
+  background: var(--sage);
   color: var(--pure-white);
 }
 
 .btn-primary:hover {
-  background: var(--soft-black);
+  background: var(--sage-light);
   transform: translateY(-1px);
 }
 

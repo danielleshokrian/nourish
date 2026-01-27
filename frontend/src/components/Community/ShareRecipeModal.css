@@ -245,14 +245,7 @@
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #45a049;
-}
+/* Button styles use global definitions from index.css */
 
 .btn-secondary {
   background-color: #6c757d;
